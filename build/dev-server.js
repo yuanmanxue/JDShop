@@ -1,11 +1,10 @@
-'use strict'
 require('./check-versions')()
 
 const config = require('../config')
 if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = JSON.parse(config.dev.env.NODE_ENV)
 }
-
+const axios = require('axios')
 const opn = require('opn')
 const path = require('path')
 const express = require('express')
@@ -24,6 +23,27 @@ const autoOpenBrowser = !!config.dev.autoOpenBrowser
 const proxyTable = config.dev.proxyTable
 
 const app = express()
+//首页轮播图接口代理过程;
+var apiRouter = express.Router()
+apiRouter.get('/getSlider', function (req, res) {
+  var url = 'https://daojia.jd.com/client'
+  axios.get(url, {
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+      referer: 'https://daojia.jd.com/html/index.html',
+      host: 'daojia.jd.com',
+      'Cache-Control': 'max-age=0'
+    },
+    params: req.query
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
+
+app.use('/api',apiRouter)
+
 const compiler = webpack(webpackConfig)
 
 const devMiddleware = require('webpack-dev-middleware')(compiler, {

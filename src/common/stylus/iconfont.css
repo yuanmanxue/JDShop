@@ -25,6 +25,14 @@
 
 .icon-fenlei:before { content: "\e634"; }
 
+.icon-sousuo:before { content: "\e612"; }
+
+.icon-guanbi:before { content: "\e839"; }
+
+.icon-arrow:before { content: "\e501"; }
+
 .icon-shouye:before { content: "\e650"; }
 
-.icon-qicheqianlian:before { content: "\e501"; }
+.icon-arrow-up:before { content: "\e502"; }
+
+.icon-qicheqianlian-:before { content: "\e503"; }
