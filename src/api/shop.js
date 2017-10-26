@@ -3,13 +3,13 @@ import axios from 'axios'
 export function getShop () {
   const url = '/api/getSlider'
   const data = Object.assign({}, commonParams, {
-    _djrandom: 15089144900216,
+    _djrandom: 15089800793514,
     body: {
       'channelId': '',
-      'city': '杭州市',
+      'city': '宁波市',
       'longitude': 121.5463,
       'latitude': 29.80923,
-      'currentPage': 2,
+      'currentPage': 1,
       'pageSize': 10,
       'arrCode': 1158,
       'coordType': '2',

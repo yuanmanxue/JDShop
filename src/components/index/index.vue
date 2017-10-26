@@ -2,7 +2,7 @@
 <div class="index-wrap">
   <!-- 搜索框 -->
   <SearchBar></SearchBar>
-  <Scroll class="scroll-wrap" ref="scroll">
+  <Scroll class="scroll-wrap" ref="scroll" :data="slider">
     <!-- 轮播图 -->
     <div class="slider-wrapper" v-if="slider.length">
       <Slider>
@@ -69,7 +69,6 @@
 import SearchBar from 'components/search-bar/search-bar'
 import Shop from 'components/shop/shop'
 import Scroll from 'base/scroll/scroll'
-// import Bscroll from 'better-scroll'
 import Slider from 'base/slider/slider'
 import Seckill from 'base/seckill/seckill'
 import {getSlider} from 'api/slider.js'
