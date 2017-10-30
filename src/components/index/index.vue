@@ -2,7 +2,7 @@
 <div class="index-wrap">
   <!-- 搜索框 -->
   <SearchBar></SearchBar>
-  <Scroll class="scroll-wrap" ref="scroll" :data="slider">
+  <Scroll class="scroll-wrap" ref="scroll" :data="shopData">
     <!-- 轮播图 -->
     <div class="slider-wrapper" v-if="slider.length">
       <Slider>
@@ -110,7 +110,6 @@ export default {
       getShop().then((res) => {
         if (res.code === ERR_OK) {
           this.shopData = res.result.data.data
-          console.log(this.shopData)
         }
       })
     }
@@ -129,6 +128,9 @@ export default {
   .scroll-wrap{
     height: 100%;
     overflow:hidden;
+  }
+  .slider-wrapper{
+    background-color: #fff;
   }
 .ball-wrap{
   display: flex;
@@ -154,7 +156,6 @@ export default {
 .footer-slider{
   .slider-wrapper{
     margin: 10px 0;
-    background-color: #ffffff;
   }
 }
 .index-wrap{

@@ -14,11 +14,7 @@
           <span>{{items.floorCellData.monthSale}}</span>
         </p>
         <p class="delivery">{{items.floorCellData.freightWords}}</p>
-        <ul v-if="tag" class="activity-list">
-          <li v-for="tags in tag" class="activity">
-            <span class="activity-tag" :class="tagClass">{{tags.iconText}}</span><span>{{matchStr(tags.words)}}</span>
-          </li>
-        </ul>
+        <ShopTags :tags="items.floorCellData.tags" :show="show" @on-toggle-show="onToggleShow"></ShopTags>
       </div>
     </li>
   </ul>
@@ -27,10 +23,11 @@
 
 <script type="text/ecmascript-6">
 import Star from 'base/star/star'
+import ShopTags from 'base/shopTags/shopTags'
 export default {
   data() {
     return {
-      tag: []
+      show: false
     }
   },
   props: {
@@ -43,34 +40,20 @@ export default {
     // console.log(this.data)
   },
   computed: {
-    tagClass() {
-      for (var k in this.data) {
-        let tagName = this.data[k].floorCellData.tags.iconText
-        if (tagName === '领券') {
-          return 'bg-lq'
-        }
-      }
-    }
   },
   methods: {
-    matchStr(str) {
-      let reg = new RegExp(/[^%&',;=?$#\x22]+/g)
-      let newStr = str.match(reg).join(',')
-      return newStr
+    onToggleShow(newData) {
+      console.log(this.show)
+      this.show = newData
     }
   },
   components: {
-    Star
+    Star,
+    ShopTags
   },
   watch: {
     data: function(newData, oldData) {
       this.data = newData
-    },
-    tag: function(newData, oldData) {
-      for (var k in this.data) {
-        this.tag = this.data[k].floorCellData.tags
-      }
-      console.log(this.tag)
     }
   }
 }
@@ -78,13 +61,14 @@ export default {
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable.styl"
   .shop-wrap{
-    background-color: #ffffff;
+    background-color: #fff;
     font-size:$font-size-small-s;
     color:$color-text-gray;
     .shop{
       padding:.26666667rem .22666667rem;
       display: flex;
       overflow: hidden;
+      border-bottom:1px solid #eee;
       .shop-avator{
         margin-right:10px;
         img{
@@ -128,44 +112,6 @@ export default {
         }
         .activity-list{
           padding-top: 5px;
-          .activity{
-            height: 15px;
-            line-height: 15px;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            padding:5px 0;
-            .activity-tag{
-              // color:$color-text-white
-              padding:5px;
-              font-size:$font-size-small
-              margin-right:10px;
-            }
-            .bg-yf{
-              background-color: $color-background-bule;
-            }
-            .bg-mj{
-              background-color: $color-background-green;
-            }
-            .bg-lq{
-              background-color: $color-background-red;
-            }
-            .bg-rx{
-              background-color: $color-background-hot;
-            }
-            .bg-sd{
-              background-color: $color-background-orange;
-            }
-            .bg-mz{
-              background-color: $color-background-green-s;
-            }
-            .bg-fq{
-              background-color: $color-background-orange-s;
-            }
-            .bg-other{
-              background-color: $color-background-other;
-            }
-          }
         }
       }
     }

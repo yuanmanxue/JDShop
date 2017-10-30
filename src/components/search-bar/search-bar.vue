@@ -1,7 +1,7 @@
 <template>
   <div class="search-bar-wrap">
     <div class="search-bar">
-      <div class="position"><i class="iconfont">&#xe613;</i><span>学府一号学府一号学府一号学府一号</span><i class="iconfont">&#xe501;</i></div>
+      <div class="position" ref="position" @click="goToMap"><i class="iconfont">&#xe613;</i><span>学府一号学府一号学府一号学府一号</span><i class="iconfont">&#xe501;</i></div>
       <div class="search-box"><i class="iconfont search-icon">&#xe612;</i><input type="text" name="" value=""></div>
       <div class="message"><i class="iconfont">&#xe602;</i></div>
     </div>
@@ -9,8 +9,13 @@
 </template>
 
 <script type="text/ecmascript-6">
-export default {
 
+export default {
+  methods: {
+    goToMap() {
+      this.$router.push({path: './map'})
+    }
+  }
 }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">

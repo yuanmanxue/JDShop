@@ -42,7 +42,6 @@ export default {
           this.recommend.push(this.data[i].floorCellData)
         }
       }
-      console.log(this.recommend)
     }
   },
   created() {

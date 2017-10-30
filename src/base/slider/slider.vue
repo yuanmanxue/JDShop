@@ -117,10 +117,10 @@
     white-space: nowrap
     .slider-group{
       .slider-item{
-        box-sizing: border-box
-        float: left
-        text-align center
-        overflow hidden
+        box-sizing: border-box;
+        float: left;
+        text-align:center;
+        overflow:hidden;
         a{
           display block
           width 100%

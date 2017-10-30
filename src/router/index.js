@@ -5,6 +5,7 @@ import Classify from '@/components/classify/classify.vue'
 import ShoppingCart from '@/components/shopping-cart/shopping-cart.vue'
 import Indent from '@/components/indent/indent.vue'
 import Mine from '@/components/mine/mine.vue'
+import Map from 'base/map/map'
 Vue.use(Router)
 
 export default new Router({
@@ -34,6 +35,11 @@ export default new Router({
       path: '/mine',
       name: 'Mine',
       component: Mine
+    },
+    {
+      path: '/map',
+      name: 'Map',
+      component: Map
     }
   ]
 })
