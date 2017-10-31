@@ -78,6 +78,9 @@ export default {
     scrollTo() {
       this.scroll && this.scroll.scrollTo.apply(this.scroll, arguments)
     },
+    scroll() {
+      this.scroll && this.scroll.scroll()
+    },
     scrollToElement() {
       this.scroll && this.scroll.scrollToElement.apply(this.scroll, arguments)
     }
@@ -86,6 +89,7 @@ export default {
     data() {
       setTimeout(() => {
         this.refresh()
+        console.log(this.data)
       }, 20)
     }
   }

@@ -6,7 +6,7 @@ import fastclick from 'fastclick'
 import 'common/stylus/index.styl'
 import 'common/stylus/iconfont.css'
 import 'lib-flexible/flexible'
-import AMap from 'vue-amap'
+import VueAMap from 'vue-amap'
 
 Vue.config.productionTip = false
 fastclick.attach(document.body)
@@ -16,10 +16,11 @@ new Vue({
   router,
   render: h => h(App)
 })
-Vue.use(AMap)
-AMap.initAMapApiLoader({
+Vue.use(VueAMap)
+VueAMap.initAMapApiLoader({
   // 申请的高德key
   key: 'YOUR_KEY',
   // 插件集合
-  plugin: ['Autocomplete', 'PlaceSearch', 'Scale', 'OverView', 'ToolBar', 'MapType', 'PolyEditor', 'AMap.CircleEditor']
+  plugin: ['Autocomplete', 'PlaceSearch', 'Scale', 'OverView', 'ToolBar', 'MapType', 'PolyEditor', 'AMap.CircleEditor'],
+  uiVersion: '1.0'
 })
