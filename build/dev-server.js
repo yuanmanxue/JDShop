@@ -41,7 +41,14 @@ apiRouter.get('/getSlider', function (req, res) {
     console.log(e)
   })
 })
-
+// 获取商铺数据
+var getShop = require('../shopData.json')
+apiRouter.get('/getShop', function (req, res) {
+  res.json({
+    errno:0,
+    data:getShop
+  })
+})
 app.use('/api',apiRouter)
 
 const compiler = webpack(webpackConfig)

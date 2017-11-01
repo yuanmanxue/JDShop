@@ -1,6 +1,6 @@
 import {commonParams} from './config.js'
 import axios from 'axios'
-export function getShop (obj) {
+export function getShop (rankType, page) {
   const url = '/api/getSlider'
   const data = Object.assign({}, commonParams, {
     _djrandom: 15089800793514,
@@ -9,12 +9,12 @@ export function getShop (obj) {
       'city': '宁波市',
       'longitude': 121.5463,
       'latitude': 29.80923,
-      'currentPage': 1,
+      'currentPage': page,
       'pageSize': 10,
       'arrCode': 1158,
       'coordType': '2',
       'platform': '1',
-      'rankType': obj
+      'rankType': rankType
     },
     format: 'json',
     lng: 121.5463,

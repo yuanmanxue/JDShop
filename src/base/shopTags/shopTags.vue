@@ -1,7 +1,7 @@
 <template>
   <div class="tagWrap">
-    <ul v-for="(item, index) in tags" class="activity" v-if="index <= (show?index:1)"  @click="toggleShow($event)">
-      <li><IconText class="activity-tag" :tagsText="item.iconText" :tagsType="item.type"></IconText><span class="activity-text">{{matchStr(item.words)}}</span></li>
+    <ul v-for="(item, index) in tags" class="activity" v-if="index <= (show?index:1)">
+      <li><IconText class="activity-tag" :tagsText="item.iconText" :tagsType="item.type" @click="toggleShow($event)"></IconText><span class="activity-text">{{matchStr(item.words)}}</span></li>
     </ul>
   </div>
 </template>
@@ -34,10 +34,8 @@ export default {
       return newStr
     },
     toggleShow(e) {
-      let event = e || window.e
-      console.log(event)
+      // let event = e || window.e
       this.myShow = !this.myShow
-      console.log(this.myShow)
     }
   },
   created() {
@@ -71,6 +69,9 @@ export default {
     white-space: nowrap;
     text-overflow: ellipsis;
     padding:5px 0;
+    li{
+      overflow: hidden;
+    }
     .activity-tag{
       float:left;
       border-radius:5px;

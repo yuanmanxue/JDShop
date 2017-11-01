@@ -1,5 +1,6 @@
 <template>
-<div class="">
+<div>
+  <div class="shop-title-wrap">——<span class="shop-title">{{footerTitle.floorName}}</span>——</div>
   <ul class="shop-wrap" v-if='data.length'>
     <li class="shop" v-for="items in data">
       <div class="shop-avator">
@@ -34,6 +35,10 @@ export default {
     data: {
       type: Array,
       defaule: null
+    },
+    footerTitle: {
+      type: Object,
+      defalut: null
     }
   },
   created() {
@@ -43,7 +48,6 @@ export default {
   },
   methods: {
     onToggleShow(newData) {
-      console.log(this.show)
       this.show = newData
     }
   },
@@ -54,12 +58,29 @@ export default {
   watch: {
     data: function(newData, oldData) {
       this.data = newData
+    },
+    footerTitle: function(newData) {
+      this.footerTitle = newData
+      console.log(this.footerTitle)
     }
   }
 }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable.styl"
+  .shop-title-wrap{
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    font-size:$font-size-large;
+    font-weight:normal;
+    border-bottom:1px solid #eee;
+    border-top:1px solid #eee;
+    background-color: #fff;
+    .shop-title{
+      font-weight:bold;
+    }
+  }
   .shop-wrap{
     background-color: #fff;
     font-size:$font-size-small-s;

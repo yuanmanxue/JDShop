@@ -1,8 +1,13 @@
 <template>
 <div class="index-wrap">
   <!-- 搜索框 -->
-  <SearchBar ref="searchBar" :color="bgWhite"></SearchBar>
-  <div class="scroll">
+  <SearchBar ref="searchBar"
+            :fold="bgWhite"
+            :storeSortTexts="storeSortTexts"
+            :rankType="rankType"
+            @change-rank-type="changeRankType">
+  </SearchBar>
+  <div class="scroll" ref="scrollWrap">
     <scroll class="scroll-wrap" :data="shopData" ref="scroll" @scroll="scroll" :probe-type="probeType" :listen-scroll="listenScroll">
       <div>
         <!-- 轮播图 -->
@@ -62,7 +67,12 @@
             </Slider>
           </div>
         </div>
-        <Shop :data="shopData"></Shop>
+        <div class="load-wrap" v-show="!shopData">
+          <load></load>
+        </div>
+        <div ref="shopList">
+          <Shop :data="shopData" :footerTitle="shopTitle" ></Shop>
+        </div>
       </div>
     </scroll>
   </div>
@@ -75,11 +85,13 @@ import Shop from 'components/shop/shop'
 import Scroll from 'base/scroll/scroll'
 import Slider from 'base/slider/slider'
 import Seckill from 'base/seckill/seckill'
+import Load from 'base/load/load'
 import {getSlider} from 'api/slider.js'
 import {getShop} from 'api/shop.js'
 import {ERR_OK} from 'api/config.js'
 
-const scrollTop = -115
+const SCROLLTOP = -115
+const SEARCHBARHEIGHT = 56
 export default {
   data() {
     return {
@@ -88,6 +100,12 @@ export default {
       seckill: [],
       footerSlider: [],
       shopData: [],
+      storeSortTexts: [],
+      rankType: 0,
+      shopTitle: {},
+      scrollBottom: 0,
+      flag: false,
+      page: 1,
       bgWhite: false
     }
   },
@@ -95,12 +113,13 @@ export default {
     this.probeType = 3
     this.listenScroll = true
     this._getSlider()
-    this._getShop()
+    this._getShop(this.rankType)
   },
   methods: {
     _getSlider() {
       getSlider().then((res) => {
         if (res.code === ERR_OK) {
+          this.storeSortTexts = res.result.config.storeSortTexts
           for (let i = 0; i < res.result.data.length; i++) {
             if (res.result.data[i].floorStyle === 'banner') {
               this.slider = res.result.data[i].data
@@ -115,18 +134,49 @@ export default {
         }
       })
     },
-    _getShop() {
-      getShop().then((res) => {
+    _getShop(rankType, page) {
+      getShop(rankType, page).then((res) => {
         if (res.code === ERR_OK) {
           this.shopData = res.result.data.data
+          console.log(this.shopData)
+          this.shopTitle = res.result.data.floorTitle
         }
       })
+      // this.$http.get('/api/getShop').then((res) => {
+      //   res = res.body
+      //   this.shopData = res.data.result.data.data
+      //   this.shopTitle = res.data.result.data.floorTitle
+      // })
     },
     scroll(pos) {
-      if (pos.y < scrollTop) {
+      if (pos.y < SCROLLTOP) {
         this.bgWhite = true
       } else {
         this.bgWhite = false
+      }
+      // 滚动到底部多少距离的时候，动态加载数据
+      this.scrollBottom = pos.y
+      let flag = -this.$refs.shopList.clientHeight
+      if (this.scrollBottom < flag) {
+        this.flag = true
+      } else {
+        this.flag = false
+      }
+    },
+    scrollToTop() {
+      let h = this.$refs.shopList.offsetTop
+      let scrollH = -h + SEARCHBARHEIGHT
+      this.$refs.scroll.scrollTo(0, scrollH)
+    },
+    changeRankType(newData) {
+      console.log(newData)
+      this.rankType = newData
+    },
+    getMoreData() {
+      if (this.flag) {
+        this.page += 1
+        this._getShop(this.rankType, this.page)
+        console.log(this.page)
       }
     }
   },
@@ -135,7 +185,17 @@ export default {
     Slider,
     Seckill,
     Scroll,
-    Shop
+    Shop,
+    Load
+  },
+  watch: {
+    rankType() {
+      this._getShop(this.rankType)
+      this.scrollToTop()
+    },
+    flag() {
+      this.getMoreData()
+    }
   }
 }
 </script>
