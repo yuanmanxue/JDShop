@@ -12,7 +12,7 @@ export default {
     FooterNav
   },
   created: function() {
-    this.$router.push('index')
+    // this.$router.push('index')
   }
 }
 </script>

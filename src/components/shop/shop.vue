@@ -2,20 +2,20 @@
 <div>
   <div class="shop-title-wrap">——<span class="shop-title">{{footerTitle.floorName}}</span>——</div>
   <ul class="shop-wrap" v-if='data.length'>
-    <li class="shop" v-for="items in data">
+    <li class="shop" v-for="item in data" @click="selectShop(item)">
       <div class="shop-avator">
-        <img :src="items.floorCellData.imgUrl" v-if='items.floorCellData.imgUrl'>
-        <img src="./newLoading.gif" alt="" v-if='!items.floorCellData.imgUrl'>
+        <img v-lazy="item.floorCellData.imgUrl" v-if='item.floorCellData.imgUrl'>
+        <img src="./newLoading.gif" alt="" v-if='!item.floorCellData.imgUrl'>
       </div>
       <div class="info">
-        <p class="name">{{items.floorCellData.name}}</p>
-        <p class="delivery-time">达达专送 - {{items.floorCellData.deliveryFirst}}</p>
+        <p class="name">{{item.floorCellData.name}}</p>
+        <p class="delivery-time">达达专送 - {{item.floorCellData.deliveryFirst}}</p>
         <p class="month-sever">
-          <Star :score="items.floorCellData.storeStar" class="star"></Star>{{items.floorCellData.storeStar}} |
-          <span>{{items.floorCellData.monthSale}}</span>
+          <Star :score="item.floorCellData.storeStar" class="star"></Star>{{item.floorCellData.storeStar}} |
+          <span>{{item.floorCellData.monthSale}}</span>
         </p>
-        <p class="delivery">{{items.floorCellData.freightWords}}</p>
-        <ShopTags :tags="items.floorCellData.tags" :show="show" @on-toggle-show="onToggleShow"></ShopTags>
+        <p class="delivery">{{item.floorCellData.freightWords}}</p>
+        <ShopTags :tags="item.floorCellData.tags" :show="show" @on-toggle-show="onToggleShow"></ShopTags>
       </div>
     </li>
   </ul>
@@ -25,6 +25,7 @@
 <script type="text/ecmascript-6">
 import Star from 'base/star/star'
 import ShopTags from 'base/shopTags/shopTags'
+// import {mapMutations} from 'vuex'
 export default {
   data() {
     return {
@@ -49,6 +50,12 @@ export default {
   methods: {
     onToggleShow(newData) {
       this.show = newData
+    },
+    // ...mapMutations({
+    //   setShop: 'SET_SHOP'
+    // }),
+    selectShop(item) {
+      this.$emit('select-shop', item)
     }
   },
   components: {
@@ -61,7 +68,6 @@ export default {
     },
     footerTitle: function(newData) {
       this.footerTitle = newData
-      console.log(this.footerTitle)
     }
   }
 }

@@ -71,11 +71,12 @@
           <load></load>
         </div>
         <div ref="shopList">
-          <Shop :data="shopData" :footerTitle="shopTitle" ></Shop>
+          <Shop :data="shopData" :footerTitle="shopTitle" @select-shop="selectShop"></Shop>
         </div>
       </div>
     </scroll>
   </div>
+  <router-view></router-view>
 </div>
 </template>
 
@@ -89,6 +90,8 @@ import Load from 'base/load/load'
 import {getSlider} from 'api/slider.js'
 import {getShop} from 'api/shop.js'
 import {ERR_OK} from 'api/config.js'
+import {mapMutations} from 'vuex'
+import {createShop} from 'common/js/shop'
 
 const SCROLLTOP = -115
 const SEARCHBARHEIGHT = 56
@@ -100,6 +103,7 @@ export default {
       seckill: [],
       footerSlider: [],
       shopData: [],
+      shopClass: [],
       storeSortTexts: [],
       rankType: 0,
       shopTitle: {},
@@ -137,8 +141,9 @@ export default {
     _getShop(rankType, page) {
       getShop(rankType, page).then((res) => {
         if (res.code === ERR_OK) {
-          this.shopData = res.result.data.data
-          console.log(this.shopData)
+          let concatArr = res.result.data.data
+          this.shopData = this.shopData.concat(concatArr)
+          this.shopClass = this._normalizeShop(this.shopData)
           this.shopTitle = res.result.data.floorTitle
         }
       })
@@ -147,6 +152,26 @@ export default {
       //   this.shopData = res.data.result.data.data
       //   this.shopTitle = res.data.result.data.floorTitle
       // })
+    },
+    selectShop(shop) {
+      this.shopClass.forEach((item) => {
+        console.log(item.params.storeId)
+        console.log(shop.floorCellData.params.storeId)
+        if (item.params.storeId === shop.floorCellData.params.storeId) {
+          this.setShop(item)
+          this.$router.push({
+            path: `/index/${item.params.storeId}`
+          })
+        }
+      })
+    },
+    _normalizeShop(list) {
+      let ret = []
+      list.forEach((item) => {
+        let {floorCellData} = item
+        ret.push(createShop(floorCellData))
+      })
+      return ret
     },
     scroll(pos) {
       if (pos.y < SCROLLTOP) {
@@ -169,16 +194,21 @@ export default {
       this.$refs.scroll.scrollTo(0, scrollH)
     },
     changeRankType(newData) {
-      console.log(newData)
       this.rankType = newData
+      this.shopData = []
+      this.page = 1
+      this._getShop(this.rankType, this.page)
     },
     getMoreData() {
       if (this.flag) {
+        console.log(this.page)
         this.page += 1
         this._getShop(this.rankType, this.page)
-        console.log(this.page)
       }
-    }
+    },
+    ...mapMutations({
+      setShop: 'SET_SHOP'
+    })
   },
   components: {
     SearchBar,
@@ -190,7 +220,6 @@ export default {
   },
   watch: {
     rankType() {
-      this._getShop(this.rankType)
       this.scrollToTop()
     },
     flag() {
