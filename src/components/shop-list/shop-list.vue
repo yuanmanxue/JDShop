@@ -7,6 +7,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+import Scroll from 'base/scroll/scroll'
 export default {
   components: {
 

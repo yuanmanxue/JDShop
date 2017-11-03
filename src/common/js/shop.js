@@ -1,11 +1,12 @@
 export default class Shop {
-  constructor({params, name, imgUrl, title, deliveryFirst, storeStar}) {
+  constructor({params, name, imgUrl, title, deliveryFirst, storeStar, freightWords}) {
     this.params = params
     this.name = name
     this.imgUrl = imgUrl
     this.title = title
     this.deliveryFirst = deliveryFirst
     this.storeStar = storeStar
+    this.freightWords = freightWords
   }
 }
 export function createShop(data) {
@@ -15,6 +16,7 @@ export function createShop(data) {
     imgUrl: data.imgUrl,
     title: data.title,
     deliveryFirst: data.deliveryFirst,
-    storeStar: data.storeStar
+    storeStar: data.storeStar,
+    freightWords: data.freightWords
   })
 }

@@ -1,16 +1,20 @@
 import {commonParams} from './config.js'
 import axios from 'axios'
-export function getShopDetail(storeId) {
+export function getShopDetail(storeId, promotLable) {
   const url = '/api/getSlider'
   const data = Object.assign({}, commonParams, {
-    _djrandom: 15096005407443,
+    _djrandom: 150969839421253,
     body: {
+      'ref': 'index/LID:7',
+      'key': '',
+      'catId': '',
       'storeId': storeId,
-      'skuId': '',
-      'activityId': '',
-      'promotionType': '',
-      'longitude': 121.5463,
-      'latitude': 29.80923
+      'sortType': 1,
+      'page': 1,
+      'pageSize': 10,
+      'cartUuid': '',
+      'promotLable': promotLable,
+      'timeTag': 1509698393771
     },
     format: 'json',
     lng: 121.5463,

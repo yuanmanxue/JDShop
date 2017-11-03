@@ -155,8 +155,6 @@ export default {
     },
     selectShop(shop) {
       this.shopClass.forEach((item) => {
-        console.log(item.params.storeId)
-        console.log(shop.floorCellData.params.storeId)
         if (item.params.storeId === shop.floorCellData.params.storeId) {
           this.setShop(item)
           this.$router.push({

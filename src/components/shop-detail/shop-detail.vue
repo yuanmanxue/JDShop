@@ -2,26 +2,23 @@
 <transition name="slide">
   <div class="shop-detail-wrap">
     <shopHeader></shopHeader>
-    <scroll :data="cateList" class="menu-scroll" ref="menuScroll">
-        <div class="shop-detail">
-          <div class="menu-wrap">
-            <ul class="menu" v-for="item in cateList" @click="toggleMenuChild()">
-              <li>
-                <p>{{item.title}}</p>
-                <ul v-for="child in item.childCategoryList" v-show="menuShow">
-                  <li>{{child.title}}</li>
-                </ul>
-              </li>
-            </ul>
-          </div>
-        </div>
-    </scroll>
+    <div class="search">
+      <SearchBox></SearchBox>
+    </div>
+    <div class="menu-scroll">
+      <ShopMenu :data="cateList" ref="menuScroll"></ShopMenu>
+    </div>
+    <div class="shop-list">
+
+    </div>
   </div>
   <router-view></router-view>
 </transition>
 </template>
 
 <script type="text/ecmascript-6">
+import ShopMenu from 'base/shop-menu/shop-menu'
+import SearchBox from 'base/search-box/search-box'
 import Scroll from 'base/scroll/scroll'
 import {mapGetters} from 'vuex'
 import {getShopDetail, storeDetail} from 'api/shop-detail.js'
@@ -46,9 +43,10 @@ export default {
     ])
   },
   methods: {
-    _getShopDetail(id) {
-      getShopDetail(id).then((res) => {
+    _getShopDetail(id, type) {
+      getShopDetail(id, type).then((res) => {
         if (res.code === ERR_OK) {
+          console.log(res)
         }
       })
     },
@@ -58,19 +56,18 @@ export default {
           this.cateList = res.result.cateList
         }
       })
-    },
-    toggleMenuChild(e) {
-      let event = e || window.event
-      console.log(event.target)
     }
   },
   created() {
-    this._getShopDetail(this.shop.params.storeId)
+    this._getShopDetail(this.shop.params.storeId, 3)
+    console.log(this.cateList)
     this._storeDetail(this.shop.params.storeId)
   },
   components: {
     Scroll,
-    ShopHeader
+    ShopHeader,
+    SearchBox,
+    ShopMenu
   }
 }
 </script>
@@ -89,34 +86,25 @@ export default {
     bottom:0;
     z-index:100;
     background-color: #ffffff;
+    .search{
+      margin-top:110px;
+    }
     .menu-scroll{
       width: 84px;
       position: fixed;
       bottom:50px;
       top:150px;
+      overflow: hidden;
+      background-color: #f4f4f4;
     }
-    // 左侧的菜单
-    .shop-detail{
-      background-color: #ffffff;
-      .menu-wrap{
-        background-color: #f4f4f4;
-      }
-      .menu{
-          color:$color-text-theme;
-          font-size:$font-size-small;
-         p{
-          padding:15px 0;
-          text-align:center;
-          border:1px solid #ddd;
-        }
-         ul li{
-           font-size:$font-size-small-s;
-           border-right:1px solid #ddd;
-           border-left:1px solid #ddd;
-           padding:15px 5px;
-          //  border-left:2px solid $color-background-green;
-        }
-      }
+    .shop-list{
+      position: fixed;
+      bottom:50px;
+      top:150px;
+      right:0;
+      left:84px;
+      overflow: hidden;
+      background-color: #fff;
     }
   }
 
