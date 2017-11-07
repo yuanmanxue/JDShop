@@ -1,4 +1,4 @@
-export default class Shop {
+ class Shop {
   constructor({params, name, imgUrl, title, deliveryFirst, storeStar, freightWords}) {
     this.params = params
     this.name = name

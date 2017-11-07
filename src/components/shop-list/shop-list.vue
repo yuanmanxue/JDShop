@@ -7,10 +7,27 @@
 </template>
 
 <script type="text/ecmascript-6">
-import Scroll from 'base/scroll/scroll'
+// import Scroll from 'base/scroll/scroll'
 export default {
+  props: {
+    data: {
+      type: Array,
+      default: null
+    }
+  },
+  created() {
+
+  },
+  methods: {
+  },
   components: {
 
+  },
+  watch: {
+    data(newData) {
+      // this.data = newData
+      // console.log(this.data)
+    }
   }
 }
 </script>

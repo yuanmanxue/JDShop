@@ -89,7 +89,6 @@ export default {
     data() {
       setTimeout(() => {
         this.refresh()
-        console.log(this.data)
       }, 500)
     }
   }

@@ -1,14 +1,14 @@
 <template>
   <div class="header-wrap">
-    <div class="header">
+    <div class="header" v-if="data">
       <div class="header-info">
         <div class="shop-avator">
-          <img :src="shop.imgUrl" alt="">
+          <img :src="data.logoUrl" alt="">
         </div>
         <div class="info">
-          <p class="title">{{shop.name}}</p>
-          <p>达达专送 | {{shop.deliveryFirst}}</p>
-          <p>{{spliceStr(shop.freightWords)}}</p>
+          <p class="title">{{data.storeInfo.storeName}}</p>
+          <p>达达专送 | {{data.storeInfo.deliveryFirst}}</p>
+          <p>{{data.freightWords}}</p>
         </div>
       </div>
       <div class="activity">
@@ -16,18 +16,24 @@
         <div class="packet"></div>
       </div>
     </div>
+    <div class="activity">
+    </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-
 import {mapGetters} from 'vuex'
 export default {
   data() {
     return {}
   },
+  props: {
+    data: {
+      type: Object,
+      default: null
+    }
+  },
   created() {
-    console.log(this.shop)
   },
   computed: {
     ...mapGetters([
@@ -35,13 +41,15 @@ export default {
     ])
   },
   methods: {
-    spliceStr(txt) {
-      let arr = []
-      arr = txt.split('，')
-      return arr[2]
-    }
+
   },
   components: {
+  },
+  watch: {
+    data(newData) {
+      this.data = newData
+      console.log(this.data)
+    }
   }
 }
 </script>
@@ -64,7 +72,7 @@ export default {
         width: 75%;
         padding:2.5%;
         float:left;
-        font-size:$font-size-small;
+        font-size:$font-size-small-s;
         color:$color-text-white;
         .shop-avator{
           width: 1.6rem;
@@ -86,6 +94,9 @@ export default {
             font-size:$font-size-large;
             padding:.13333333rem 0;
           }
+          p{
+            padding-bottom: .13333333rem;
+          }
         }
       }
       .activity{
@@ -101,6 +112,8 @@ export default {
           background-size: 60%;
         }
       }
+    }
+    .activity{
     }
   }
 </style>
