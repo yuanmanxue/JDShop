@@ -1,7 +1,7 @@
 <template>
 <transition name="slide">
   <div class="shop-detail-wrap">
-    <shopHeader :data="shopInfo"></shopHeader>
+    <shopHeader :data="shopInfo" v-if="shopInfo"></shopHeader>
     <div class="search">
       <SearchBox></SearchBox>
     </div>

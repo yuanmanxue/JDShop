@@ -24,7 +24,7 @@
 
 <script type="text/ecmascript-6">
 import Star from 'base/star/star'
-import ShopTags from 'base/shopTags/shopTags'
+import ShopTags from 'base/shop-tags/shop-tags'
 // import {mapMutations} from 'vuex'
 export default {
   data() {

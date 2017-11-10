@@ -1,12 +1,15 @@
 <template>
-  <div class="tagWrap">
-    <ul v-for="(item, index) in tags" class="activity" v-if="index <= (show?index:1)">
-      <li><IconText class="activity-tag" :tagsText="item.iconText" :tagsType="item.type" @click="toggleShow($event)"></IconText><span class="activity-text">{{matchStr(item.words)}}</span></li>
-    </ul>
-  </div>
+  <Scroll class="tag-scroll">
+    <div class="tagWrap">
+      <ul class="activity">
+        <li v-for="(item, index) in tags"  v-if="index <= (show?index:indexNum)"><IconText class="activity-tag" :tagsText="item.iconText" :tagsType="item.type" @click="toggleShow($event)"></IconText><span class="activity-text">{{matchStr(item.words)}}</span></li>
+      </ul>
+    </div>
+  </Scroll>
 </template>
 
 <script type="text/ecmascript-6">
+import Scroll from 'base/scroll/scroll'
 import IconText from 'base/iconText/iconText'
 export default {
   data() {
@@ -22,6 +25,10 @@ export default {
     show: {
       type: Boolean,
       default: null
+    },
+    indexNum: {
+      type: Number,
+      default: 1
     }
   },
   computed: {
@@ -42,7 +49,8 @@ export default {
 
   },
   components: {
-    IconText
+    IconText,
+    Scroll
   },
   watch: {
     tags: function(newData, oldData) {
@@ -60,17 +68,17 @@ export default {
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable.styl"
   .tagWrap{
-      margin-top: .2rem;
+      // margin-top: .2rem;
   }
   .activity{
-    height: 15px;
     line-height: 15px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    padding:5px 0;
+    font-size:$font-size-small-s
     li{
       overflow: hidden;
+      height: 25px;
     }
     .activity-tag{
       float:left;
@@ -78,7 +86,6 @@ export default {
       color:$color-text-white
       font-style:normal;
       padding:2px 4px;
-      font-size:$font-size-small-s
       margin-right:10px;
     }
     .activity-text{
