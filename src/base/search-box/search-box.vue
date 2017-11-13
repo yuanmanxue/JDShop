@@ -20,7 +20,7 @@ export default {
     position: relative;
     height: 40px;
     width: 100%;
-    z-index:99;
+    z-index:88;
     background-color: #eee;
     border-bottom: 1px solid #ddd;
     input{

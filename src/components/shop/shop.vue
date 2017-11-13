@@ -15,7 +15,9 @@
           <span>{{item.floorCellData.monthSale}}</span>
         </p>
         <p class="delivery">{{item.floorCellData.freightWords}}</p>
-        <ShopTags :tags="item.floorCellData.tags" :show="show" @on-toggle-show="onToggleShow"></ShopTags>
+        <div class="shop-tags-wrap">
+          <ShopTags :tags="item.floorCellData.tags" :show="show" @on-toggle-show="onToggleShow"></ShopTags>
+        </div>
       </div>
     </li>
   </ul>
@@ -139,6 +141,9 @@ export default {
         }
         .activity-list{
           padding-top: 5px;
+        }
+        .shop-tags-wrap{
+          padding-top: 10px;
         }
       }
     }

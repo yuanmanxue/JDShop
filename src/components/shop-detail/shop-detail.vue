@@ -18,7 +18,7 @@ import ShopClassification from 'components/shop-classification/shop-classificati
 import SearchBox from 'base/search-box/search-box'
 import Scroll from 'base/scroll/scroll'
 import {mapGetters} from 'vuex'
-import {getShopDetail, storeDetail} from 'api/shop-detail.js'
+import {storeDetail} from 'api/shop-detail.js'
 import ShopHeader from 'base/shop-detail-header/shop-detail-header'
 import {ERR_OK} from 'api/config.js'
 export default {
@@ -42,13 +42,6 @@ export default {
     ])
   },
   methods: {
-    _getShopDetail(id) {
-      getShopDetail(id).then((res) => {
-        if (res.code === ERR_OK) {
-          console.log(res)
-        }
-      })
-    },
     _storeDetail(id) {
       storeDetail(id).then((res) => {
         if (res.code === ERR_OK) {
@@ -60,12 +53,10 @@ export default {
     }
   },
   created() {
-    console.log(this.shop.params)
     if (!this.shop.params) {
       this.$router.push({path: '/index'})
       return false
     }
-    this._getShopDetail(this.shop.params.storeId)
     this._storeDetail(this.shop.params.storeId)
   },
   components: {
