@@ -5,7 +5,7 @@
         <!-- <div class="banner">
           <img :src="item.imgUrl" alt="" v-for="item in banner">
         </div> -->
-        <ShopList :data="shopList"></ShopList>
+        <ShopList :data="shopLists"></ShopList>
     </div>
   </div>
 </template>
@@ -13,8 +13,8 @@
 <script type="text/ecmascript-6">
 import menuScroll from 'base/menu-scroll/menu-scroll'
 import ShopList from 'components/shop-list/shop-list'
-import {getShopDetail} from 'api/shop-detail.js'
 import Scroll from 'base/scroll/scroll'
+import {getShopDetail} from 'api/shop-detail.js'
 import {mapGetters} from 'vuex'
 import {ERR_OK} from 'api/config.js'
 export default {
@@ -25,7 +25,7 @@ export default {
       jNum: 0,
       catId: '',
       promotLabel: '',
-      shopList: null
+      shopLists: null
     }
   },
   props: {
@@ -55,8 +55,7 @@ export default {
     _getShopDetail(storeId, promotLable, catId) {
       getShopDetail(storeId, promotLable, catId).then((res) => {
         if (res.code === ERR_OK) {
-          this.shopList = res.result.searchResultVOList
-          console.log(res.result.searchResultVOList)
+          this.shopLists = res.result.searchResultVOList
         }
       })
     },
@@ -100,7 +99,7 @@ export default {
     top:150px;
     left:84px;
     right:0;
-    z-index:98;
+    z-index:100;
     overflow: hidden;
     background-color: #fff;
   }

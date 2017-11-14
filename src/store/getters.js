@@ -1,2 +1,2 @@
 export const shop = state => state.shop
-export const shopCount = state => state.shopCount
+export const shopCount = state => state.shopList

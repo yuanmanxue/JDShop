@@ -1,5 +1,5 @@
 const state = {
   shop: {},
-  shopCount: 0
+  shopList: {}
 }
 export default state

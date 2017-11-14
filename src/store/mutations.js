@@ -4,8 +4,8 @@ const mutations = {
   [types.SET_SHOP](state, shop) {
     state.shop = shop
   },
-  [types.SET_SHOPCOUNT](state, shopCount) {
-    state.shopCount = shopCount
+  [types.SET_SHOPLIST](state, shopList) {
+    state.shopList = shopList
   }
 }
 export default mutations
