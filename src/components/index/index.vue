@@ -32,7 +32,7 @@
         <!-- footerBanner1 -->
         <div class="footer-slider" v-if="footerSlider.length">
           <div class="slider-wrapper">
-            <Slider :autoPlay='false'>
+            <Slider :autoPlay='false' :loop="false">
               <div v-for="item in footerSlider[0]">
                 <a href="#">
                   <img :src="item.floorCellData.imgUrl"/>

@@ -1,10 +1,11 @@
 <template>
 <div class="">
-  <Scroll class="shop-list-wrap" :data="data">
+  <div class="shop-title">{{currentTagTitle}} ({{totalCount}})</div>
+  <Scroll class="shop-list-wrap" :data="food" ref="scrollShopList" :probe-type="probeType" :listen-scroll="listenScroll">
     <div class="shop-list">
       <ul>
-        <li v-for="(item, index) in food" ref="shopListItem">
-          <img :src="item.imgUrl" alt="" class="left">
+        <li v-for="(item, index) in shopList" ref="shopListItem">
+          <img v-lazy="item.imgUrl" v-if="item.imgUrl" class="left">
           <div class="right">
             <p class="name">{{item.skuName}}</p>
             <p class="month-sales"><span>月售{{item.monthSales}}件</span><span v-if="item.highOpinion"> | {{item.highOpinion}}</span></p>
@@ -18,6 +19,7 @@
           </div>
         </li>
       </ul>
+      <div class="no-more" v-show="noMore">—— 去看看其他分类吧 ——</div>
     </div>
   </Scroll>
   <div class="shop-cart-wrap">
@@ -30,8 +32,7 @@ import Scroll from 'base/scroll/scroll'
 import iconText from 'base/iconText/iconText'
 import cartBall from 'base/cart-ball/cart-ball'
 import shopCart from 'base/shop-cart/shop-cart'
-import {createFood} from 'common/js/food.js'
-import {mapMutations, mapActions} from 'vuex'
+import {mapGetters, mapActions} from 'vuex'
 export default {
   data() {
     return {
@@ -40,34 +41,36 @@ export default {
     }
   },
   props: {
-    data: {
-      type: Array,
-      default: null
-    }
   },
   created() {
+    this.probeType = 3
+    this.listenScroll = true
   },
   mounted() {
   },
   computed: {
+    ...mapGetters([
+      'shopList',
+      'currentTagTitle',
+      'totalCount'
+    ]),
+    noMore() {
+      if (this.shopList.length === this.totalCount) {
+        return true
+      } else {
+        return false
+      }
+    }
   },
   methods: {
     addCountFn(item) {
-      this.currentFood.push(item)
+      // console.log(item)
     },
     decrcountFn(item) {
-      // this.currentFood.splice(item, 1)
     },
-    _normalizeFood(list) {
-      let ret = []
-      list.forEach((item) => {
-        ret.push(createFood(item))
-      })
-      return ret
+    scrollToTop() {
+      this.$refs.scrollShopList.scrollTo(0, 0)
     },
-    ...mapMutations({
-      setShopList: 'SET_SHOPLIST'
-    }),
     ...mapActions([
       'changeCount'
     ])
@@ -79,12 +82,15 @@ export default {
     shopCart
   },
   watch: {
-    data(newData) {
-      this.data = newData
-      this.food = this._normalizeFood(this.data)
-      // this.setShopList(this.food)
-      // this.changeCount(this.food, 0)
+    shopList(newData) {
+      this.food = newData
+      this.scrollToTop()
     }
+    // noMore() {
+    //   this.$nextTick(() => {
+    //     this.$refs.scrollShopList.refresh()
+    //   })
+    // }
   }
 }
 </script>
@@ -94,9 +100,23 @@ export default {
     position: fixed;
     left: 85px;
     right:0;
-    top:150px;
+    top:180px;
     bottom:50px;
     overflow: hidden;
+  }
+  .shop-title{
+    position: absolute;
+    left:0;
+    right:0;
+    top:0px;
+    height: 30px;
+    line-height: 30px;
+    font-size:$font-size-small-s;
+    text-indent:10px;
+    background-color:#f4f4f4;
+    border-top: 1px solid #ddd;
+    color:$color-text-nav;
+    z-index:130;
   }
   .shop-list{
     li{
@@ -155,5 +175,12 @@ export default {
     z-index:110;
     border-top: 1px solid #d9d9d9;
     background-color: #fff;
+  }
+  .no-more{
+    height: 30px;
+    line-height: 30px;
+    font-size:$font-size-small-s;
+    color:#999;
+    text-align: center;
   }
 </style>

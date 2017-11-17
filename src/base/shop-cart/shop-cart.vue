@@ -1,7 +1,7 @@
 <template>
     <div class="shop-cart">
       <div class="left">
-        <i class="cart iconfont active">&#xe503;</i>
+        <i class="cart iconfont" :class="{'active': totalCount > 0}">&#xe503;</i>
         <i class="num" :class="{'active': totalCount > 0}">{{totalCount}}</i>
         <span class="txt" :class="{'active': totalCount > 0}">{{totalPrice}}</span>
       </div>
@@ -107,7 +107,7 @@ export default {
       }
       .cart{
         position: absolute;
-        left:5px;
+        left:15px;
         bottom:4px;
         display: inline-block;
         width: 40px;

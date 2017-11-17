@@ -1,2 +1,4 @@
 export const shop = state => state.shop
-export const shopCount = state => state.shopList
+export const shopList = state => state.shopList
+export const currentTagTitle = state => state.currentTagTitle
+export const totalCount = state => state.totalCount

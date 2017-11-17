@@ -1,2 +1,4 @@
 export const SET_SHOP = 'SET_SHOP'
 export const SET_SHOPLIST = 'SET_SHOPLIST'
+export const SET_CURRENT_TAGTITLE = 'SET_CURRENT_TAGTITLE'
+export const SET_TOTAL_COUNT = 'SET_TOTAL_COUNT'

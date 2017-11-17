@@ -243,7 +243,7 @@ export default {
         position: relative;
         font-size:$font-size-small;
         color:$color-text-white;
-        overflow: auto;
+        overflow: hidden;
         .more{
           padding:5px 0;
           position: absolute;

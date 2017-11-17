@@ -2,11 +2,15 @@
   <scroll :data="data" class="menu-scroll" ref="menuScroll" :probe-type="probeType" :listen-scroll="listenScroll">
     <div class="shop-detail">
       <div class="menu-wrap">
-        <ul class="menu" v-for="(item, index) in data">
-          <li>
+        <ul class="menu">
+          <li  v-for="(item, index) in data" ref="menuListGroup">
             <p @click="toggleMenuChild(index)" :class="{active: index === active}">{{item.title}}</p>
               <ul :class="{open: index === childShow}" class="off" v-show="item.childCategoryList">
-                <li v-for="(child, cindex) in item.childCategoryList" :class="{active: cindex === childActive}" @click="toggleMenuChildActive(cindex)">{{child.title}}</li>
+                <li
+                v-for="(child, cindex) in item.childCategoryList"
+                :class="{active: cindex === childActive}" @click="toggleMenuChildActive(cindex)"
+                ref="menuChildListGroup"
+                >{{child.title}}</li>
               </ul>
           </li>
         </ul>
@@ -52,8 +56,8 @@ export default {
       this.iNum = index
       this.$nextTick(() => {
         this.$refs.menuScroll.refresh()
+        this.scrollToTop(this.$refs.menuListGroup[this.iNum], 46)
       })
-      console.log(this.iNum)
       this.$emit('selectMenuParent', this.iNum)
     },
     toggleMenuChildActive(index) {
@@ -61,14 +65,20 @@ export default {
         this.childActive = index
       }
       this.jNum = index
-      console.log(this.jNum)
+      // this.scrollToTop(this.$refs.menuChildListGroup[this.jNum], -46)
       this.$emit('selectMenuChild', this.jNum)
+    },
+    scrollToTop(obj, destence) {
+      this.$refs.menuScroll.scrollToElement(obj, destence)
     }
   },
   components: {
     Scroll
   },
   watch: {
+    data(newData) {
+      this.data = newData
+    }
   }
 }
 </script>
@@ -77,9 +87,9 @@ export default {
   // 左侧的菜单
   .menu-scroll{
     width:84px;
-    position: fixed;
-    bottom:50px;
-    top:150px;
+    position: absolute;
+    bottom:0px;
+    top: 0px;
     overflow: hidden;
     z-index:100;
     background-color: #f4f4f4;

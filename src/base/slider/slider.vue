@@ -3,7 +3,7 @@
     <div class="slider-group" ref="sliderGroup">
       <slot></slot>
     </div>
-    <div class="dots">
+    <div class="dots" v-show="loop">
       <span class="dota" v-for="(item, index) in dots" :class="{active: currentPageIndex === index}" ></span>
     </div>
   </div>
