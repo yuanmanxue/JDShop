@@ -3,7 +3,7 @@
   <div class="cart-add" @click="addCount"></div>
   <div class="cart-num" v-show="food.count>0">{{food.count}}</div>
   <transition name="move">
-    <div class="cart-decr" v-show="food.count>0" @click="decrcount"></div>
+    <div class="cart-decr" v-show="food.count>0" @click="decrCount"></div>
   </transition>
   <div class="ball-wrap">
     <div class="ball" v-for="ball in balls" name="drop" ref="ball">
@@ -14,7 +14,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-import {mapActions, mapGetters} from 'vuex'
+import {mapActions} from 'vuex'
 export default {
   data() {
     return {
@@ -45,36 +45,17 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'shopList'
-    ])
   },
   methods: {
-    addCount(event) {
-      if (!this.food.count) {
-        // this.shopList.forEach((item) => {
-        //   if (item.skuId === this.food.skuId) {
-            this.food.count = 1
-            // this.changeCount(this.food)
-        //   }
-        // })
-      } else {
-        this.food.count++
-        // this.changeCount(this.food)
-      }
-      console.log(this.food.count)
-      this.$emit('addCount')
-      // this.drop()
+    addCount() {
+      this.addCountFn(this.food)
     },
-    decrcount() {
-      if (this.food.count) {
-        this.food.count--
-        this.changeCount(this.food)
-      }
-      this.$emit('decrcount')
+    decrCount() {
+     this.decrCountFn(this.food)
     },
     ...mapActions([
-      'changeCount'
+      'addCountFn',
+      'decrCountFn'
     ])
     // drop() {
     //   let inner = this.$refs.innerBall[0]
@@ -96,9 +77,9 @@ export default {
     // })
   },
   watch: {
-    food(newData) {
-      this.food = newData
-    }
+    // food(newData) {
+    //   this.food = newData
+    // }
   }
 }
 </script>

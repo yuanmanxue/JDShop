@@ -20,6 +20,10 @@ export default {
       type: Array,
       default: null
     },
+    dataObject: {
+      type: Object,
+      default: null
+    },
     listenScroll: {
       type: Boolean,
       default: false
@@ -87,6 +91,11 @@ export default {
   },
   watch: {
     data() {
+      setTimeout(() => {
+        this.refresh()
+      }, 500)
+    },
+    dataObject() {
       setTimeout(() => {
         this.refresh()
       }, 500)

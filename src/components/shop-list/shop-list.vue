@@ -1,10 +1,10 @@
 <template>
 <div class="">
   <div class="shop-title">{{currentTagTitle}} ({{totalCount}})</div>
-  <Scroll class="shop-list-wrap" :data="food" ref="scrollShopList" :probe-type="probeType" :listen-scroll="listenScroll">
+  <Scroll class="shop-list-wrap" :data="currentShopList" ref="scrollShopList" :probe-type="probeType" :listen-scroll="listenScroll">
     <div class="shop-list">
       <ul>
-        <li v-for="(item, index) in shopList" ref="shopListItem">
+        <li v-for="(item, index) in currentShopList" ref="shopListItem">
           <img v-lazy="item.imgUrl" v-if="item.imgUrl" class="left">
           <div class="right">
             <p class="name">{{item.skuName}}</p>
@@ -13,7 +13,7 @@
               <iconText :tagsText="item.tags[0].iconText" :tagsType="item.tags[0].type"></iconText>
             </div>
             <div class="ball-wrap">
-              <cartBall :food="item" @addCount="addCountFn(item)" @decrcount="decrcountFn(item)"></cartBall>
+              <cartBall :food="item"></cartBall>
             </div>
             <p><span class="real-price">￥{{item.realTimePrice}}</span><span v-if="item.basicPrice" class="old-price">￥{{item.basicPrice}}</span></p>
           </div>
@@ -32,7 +32,7 @@ import Scroll from 'base/scroll/scroll'
 import iconText from 'base/iconText/iconText'
 import cartBall from 'base/cart-ball/cart-ball'
 import shopCart from 'base/shop-cart/shop-cart'
-import {mapGetters, mapActions} from 'vuex'
+import {mapGetters} from 'vuex'
 export default {
   data() {
     return {
@@ -52,10 +52,11 @@ export default {
     ...mapGetters([
       'shopList',
       'currentTagTitle',
-      'totalCount'
+      'totalCount',
+      'currentShopList'
     ]),
     noMore() {
-      if (this.shopList.length === this.totalCount) {
+      if (this.currentShopList.length === this.totalCount - 1) {
         return true
       } else {
         return false
@@ -63,17 +64,9 @@ export default {
     }
   },
   methods: {
-    addCountFn(item) {
-      // console.log(item)
-    },
-    decrcountFn(item) {
-    },
     scrollToTop() {
       this.$refs.scrollShopList.scrollTo(0, 0)
-    },
-    ...mapActions([
-      'changeCount'
-    ])
+    }
   },
   components: {
     Scroll,
@@ -84,13 +77,8 @@ export default {
   watch: {
     shopList(newData) {
       this.food = newData
-      this.scrollToTop()
+      // this.scrollToTop()
     }
-    // noMore() {
-    //   this.$nextTick(() => {
-    //     this.$refs.scrollShopList.refresh()
-    //   })
-    // }
   }
 }
 </script>

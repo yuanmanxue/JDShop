@@ -165,10 +165,8 @@ export default {
     },
     _normalizeShop(list) {
       let ret = []
-      // console.log(list)
       list.forEach((item) => {
         let {floorCellData} = item
-        // console.log(floorCellData)
         ret.push(createShop(floorCellData))
       })
       return ret

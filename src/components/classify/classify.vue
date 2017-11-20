@@ -7,17 +7,19 @@
       <div class="classify-list-menu">
         <menuScroll :data="classifyList" @selectMenuParent="selectMenuParent"></menuScroll>
       </div>
-      <div class="classify-scroll">
-        <Scroll class="classify-list" v-if="list" :data="classifyList" ref="scrollClassifyList" :probe-type="probeType" :listen-scroll="listenScroll">
-          <div v-for="item in list.groupList" class="list-group">
-            <div>{{item.name}}</div>
-            <ul>
-              <li v-for="itemChild in item.tabCateList">
-                <img v-lazy="itemChild.imgUrl" alt="">
-                <p>{{itemChild.name}}</p>
-                <!-- <p>{{item.tabCateList}}</p> -->
-              </li>
-            </ul>
+      <div class="classify-scroll" v-if="list">
+        <Scroll class="classify-list" :dataObject="list" ref="scrollClassifyList" :probe-type="probeType" :listen-scroll="listenScroll">
+          <div>
+            <div v-for="item in list.groupList" class="list-group">
+              <div class="name">{{item.name}}</div>
+              <ul>
+                <li v-for="itemChild in item.tabCateList">
+                  <img v-lazy="itemChild.imgUrl" alt="">
+                  <p>{{itemChild.name}}</p>
+                  <!-- <p>{{item.tabCateList}}</p> -->
+                </li>
+              </ul>
+            </div>
           </div>
         </Scroll>
       </div>
@@ -36,7 +38,8 @@ export default {
   data() {
     return {
       classifyList: [],
-      iNum: 0
+      iNum: 0,
+      currentList: []
     }
   },
   props: {
@@ -51,8 +54,8 @@ export default {
   },
   computed: {
     list() {
+      // this.$refs.scrollClassifyList.refresh()
       return this.classifyList[this.iNum]
-      // return this.classifyList[this.iNum].groupList
     }
   },
   methods: {
@@ -62,11 +65,6 @@ export default {
           this.classifyList = this._normalizeClassifyTag(res.result.firstTabCate)
         }
       })
-      // .then(() => {
-      //   this.$nextTick(() => {
-      //     this.$refs.scrollClassifyList.refresh()
-      //   })
-      // })
     },
     _normalizeClassifyTag(list) {
       let ret = []
@@ -80,11 +78,6 @@ export default {
     },
     selectMenuParent(i) {
       this.iNum = i
-      this.$nextTick(() => {
-        this.$refs.scrollClassifyList.refresh()
-        this.scrollToTop()
-      })
-      console.log(i)
     }
   },
   components: {
@@ -93,11 +86,9 @@ export default {
     Scroll
   },
   watch: {
-    classifyList() {
-      // this.$nextTick(() => {
-      //   this.$refs.scrollClassifyList.refresh()
-      // })
-    }
+    // list() {
+    //   this.$refs.scrollClassifyList.refresh()
+    // }
   }
 }
 </script>
@@ -126,5 +117,27 @@ export default {
     left:84px;
     right:0;
     overflow: hidden;
+    font-size:$font-size-small;
+    color:$color-text-nav;
+    .name{
+      text-indent:20px;
+      padding: 10px 0;
+    }
+    ul{
+      display: flex;
+      flex-wrap:wrap;
+      li{
+        width: 33%;
+        img{
+          display: block;
+          margin: 0 auto;
+          width: 60%;
+        }
+        p{
+          padding: 10px 0;
+          text-align: center;
+        }
+      }
+    }
   }
 </style>

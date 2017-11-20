@@ -2,7 +2,7 @@ const state = {
   shop: {},
   shopList: [],
   currentTagTitle: '',
-  currentShopList: '',
+  currentShopList: [],
   totalCount: ''
 }
 export default state
