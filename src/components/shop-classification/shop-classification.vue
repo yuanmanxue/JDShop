@@ -56,7 +56,8 @@ export default {
   computed: {
     ...mapGetters([
       'shop',
-      'shopList'
+      'shopList',
+      'currentShopList'
     ])
   },
   methods: {
@@ -69,30 +70,26 @@ export default {
           if (!this.tagTitle) {
             this.tagTitle = this.data[0].childCategoryList[0].title
           }
-          console.log(this.totalCount)
-          console.log(this.tagTitle)
           // new  food这个类
           food = this._normalizeFood(this.shopLists, this.promotLabel, this.tagTitle, this.totalCount)
-          // vuex存储
+          // vuex存储shopList
           if (this.shopList.length === 0) {
             this.setShopList(food)
-            this.setCurrentShopList(food)
           } else {
             this.connectShopList(food)
           }
+          // vuex存储currentShopList
+          this.setCurrentShopList(food)
         }
       }).then(() => {
-        if (!this.tagTitle) {
-          this.tagTitle = this.data[0].childCategoryList[0].title
-        }
         this.setCurrentTagTitle(this.tagTitle)
         this.setTotalCount(this.totalCount)
       })
     },
-    _normalizeFood(list, promotLabel) {
+    _normalizeFood(list, promotLabel, tagTitle, totalCount) {
       let ret = []
       list.forEach((item) => {
-        ret.push(createFood(item, promotLabel))
+        ret.push(createFood(item, promotLabel, tagTitle, totalCount))
       })
       return ret
     },
@@ -129,6 +126,7 @@ export default {
       this.promotLabel = this.data[this.iNum].childCategoryList[this.jNum].promotLabel
       this.tagTitle = this.data[this.iNum].childCategoryList[this.jNum].title
       let flag = this.judgeToLoad()
+      console.log(flag)
       if (!flag) {
         this._getShopDetail(this.shop.params.storeId, this.promotLabel, this.catId)
       }
@@ -139,8 +137,11 @@ export default {
     judgeToLoad() {
       let arr = []
       let ret = false
+      console.log(this.promotLabel)
+      console.log(this.shop.params.storeId)
+      console.log(this.catId)
       this.shopList.forEach((item) => {
-        if (item.promotLabel === this.promotLabel && item.catId === this.catId) {
+        if (item.promotLabel === this.promotLabel && item.catId === this.catId && item.storeId === this.shop.params.storeId) {
           arr.push(item)
           ret = true
         }
@@ -148,7 +149,13 @@ export default {
       if (ret) {
         this.setCurrentShopList(arr)
       }
+      this.changeTotalNum()
       return ret
+    },
+    changeTotalNum() {
+      console.table(this.currentShopList)
+      this.setCurrentTagTitle(this.currentShopList[0].tagTitle)
+      this.setTotalCount(this.currentShopList[0].totalCount)
     }
   },
   components: {

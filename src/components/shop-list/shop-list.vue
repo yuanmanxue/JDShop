@@ -56,7 +56,7 @@ export default {
       'currentShopList'
     ]),
     noMore() {
-      if (this.currentShopList.length === this.totalCount - 1) {
+      if (this.currentShopList.length === this.totalCount && this.currentShopList.length < 10) {
         return true
       } else {
         return false
