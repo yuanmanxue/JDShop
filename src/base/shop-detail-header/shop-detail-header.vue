@@ -154,6 +154,7 @@ export default {
   watch: {
     data(newData) {
       this.data = newData
+      console.log(this.data)
     }
   }
 }
@@ -291,7 +292,6 @@ export default {
       }
       p{
         margin-left:1.33333333rem;
-        height: .53333333rem;
         line-height:.53333333rem;
       }
     }

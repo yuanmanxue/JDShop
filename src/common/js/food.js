@@ -1,5 +1,5 @@
 class Food {
- constructor({realTimePrice, storeId, venderId, skuId, imgUrl, skuName, monthSales, highOpinion, tags, basicPrice, count, promotLabel, catId, tagTitle, totalCount}) {
+ constructor({realTimePrice, storeId, venderId, skuId, imgUrl, skuName, monthSales, highOpinion, tags, basicPrice, count, promotLabel, tagTitle, totalCount, catId}) {
    this.realTimePrice = realTimePrice
    this.storeId = storeId
    this.venderId = venderId
@@ -17,7 +17,7 @@ class Food {
    this.totalCount = totalCount
  }
 }
-export function createFood(data, promotLabel, tagTitle, totalCount) {
+export function createFood(data, promotLabel, tagTitle, totalCount, catId) {
  return new Food({
    realTimePrice: data.realTimePrice,
    storeId: data.storeId,
@@ -31,7 +31,7 @@ export function createFood(data, promotLabel, tagTitle, totalCount) {
    basicPrice: data.basicPrice,
    count: data.count,
    promotLabel: promotLabel,
-   catId: data.catId,
+   catId: catId,
    tagTitle: tagTitle,
    totalCount: totalCount
  })

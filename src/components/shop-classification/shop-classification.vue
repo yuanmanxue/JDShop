@@ -71,7 +71,7 @@ export default {
             this.tagTitle = this.data[0].childCategoryList[0].title
           }
           // new  food这个类
-          food = this._normalizeFood(this.shopLists, this.promotLabel, this.tagTitle, this.totalCount)
+          food = this._normalizeFood(this.shopLists, this.promotLabel, this.tagTitle, this.totalCount, this.catId)
           // vuex存储shopList
           if (this.shopList.length === 0) {
             this.setShopList(food)
@@ -79,28 +79,28 @@ export default {
             this.connectShopList(food)
           }
           // vuex存储currentShopList
-          this.setCurrentShopList(food)
+          this.setCurrentShopListFn(food)
         }
       }).then(() => {
         this.setCurrentTagTitle(this.tagTitle)
         this.setTotalCount(this.totalCount)
       })
     },
-    _normalizeFood(list, promotLabel, tagTitle, totalCount) {
+    _normalizeFood(list, promotLabel, tagTitle, totalCount, catId) {
       let ret = []
       list.forEach((item) => {
-        ret.push(createFood(item, promotLabel, tagTitle, totalCount))
+        ret.push(createFood(item, promotLabel, tagTitle, totalCount, catId))
       })
       return ret
     },
     ...mapMutations({
       setShopList: 'SET_SHOPLIST',
       setCurrentTagTitle: 'SET_CURRENT_TAGTITLE',
-      setTotalCount: 'SET_TOTAL_COUNT',
-      setCurrentShopList: 'SET_CURRENT_SHOPLIST'
+      setTotalCount: 'SET_TOTAL_COUNT'
     }),
     ...mapActions([
-      'connectShopList'
+      'connectShopList',
+      'setCurrentShopListFn'
     ]),
     selectMenuParent(i) {
       this.iNum = i
@@ -113,6 +113,7 @@ export default {
         this.promotLabel = this.data[this.iNum].childCategoryList[0].promotLabel
         this.tagTitle = this.data[this.iNum].childCategoryList[0].title
       }
+      console.log(this.catId)
       let flag = this.judgeToLoad()
       if (!flag) {
         this._getShopDetail(this.shop.params.storeId, this.promotLabel, this.catId)
@@ -126,10 +127,10 @@ export default {
       this.promotLabel = this.data[this.iNum].childCategoryList[this.jNum].promotLabel
       this.tagTitle = this.data[this.iNum].childCategoryList[this.jNum].title
       let flag = this.judgeToLoad()
-      console.log(flag)
       if (!flag) {
         this._getShopDetail(this.shop.params.storeId, this.promotLabel, this.catId)
       }
+      console.log(this.catId)
       // this._getShopDetail(this.shop.params.storeId, this.promotLabel, this.catId)
       this.$refs.shopList.scrollToTop()
     },
@@ -137,9 +138,6 @@ export default {
     judgeToLoad() {
       let arr = []
       let ret = false
-      console.log(this.promotLabel)
-      console.log(this.shop.params.storeId)
-      console.log(this.catId)
       this.shopList.forEach((item) => {
         if (item.promotLabel === this.promotLabel && item.catId === this.catId && item.storeId === this.shop.params.storeId) {
           arr.push(item)
@@ -147,15 +145,15 @@ export default {
         }
       })
       if (ret) {
-        this.setCurrentShopList(arr)
+        this.setCurrentShopListFn(arr)
       }
+      // 重新设置setCurrentTagTitle和setTotalCount
       this.changeTotalNum()
       return ret
     },
     changeTotalNum() {
-      console.table(this.currentShopList)
-      this.setCurrentTagTitle(this.currentShopList[0].tagTitle)
-      this.setTotalCount(this.currentShopList[0].totalCount)
+      this.setCurrentTagTitle(this.tagTitle)
+      this.setTotalCount(this.totalCount)
     }
   },
   components: {

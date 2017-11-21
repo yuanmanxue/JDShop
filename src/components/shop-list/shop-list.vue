@@ -13,7 +13,11 @@
               <iconText :tagsText="item.tags[0].iconText" :tagsType="item.tags[0].type"></iconText>
             </div>
             <div class="ball-wrap">
-              <cartBall :food="item"></cartBall>
+              <cartBall
+               :food="item"
+               @addCount="addCount(item)"
+               @decrCount="decrCount(item)"
+               ></cartBall>
             </div>
             <p><span class="real-price">￥{{item.realTimePrice}}</span><span v-if="item.basicPrice" class="old-price">￥{{item.basicPrice}}</span></p>
           </div>
@@ -32,7 +36,7 @@ import Scroll from 'base/scroll/scroll'
 import iconText from 'base/iconText/iconText'
 import cartBall from 'base/cart-ball/cart-ball'
 import shopCart from 'base/shop-cart/shop-cart'
-import {mapGetters} from 'vuex'
+import {mapGetters, mapActions, mapMutations} from 'vuex'
 export default {
   data() {
     return {
@@ -50,7 +54,6 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'shopList',
       'currentTagTitle',
       'totalCount',
       'currentShopList'
@@ -66,7 +69,22 @@ export default {
   methods: {
     scrollToTop() {
       this.$refs.scrollShopList.scrollTo(0, 0)
-    }
+    },
+    addCount(food) {
+      let obj = Object.assign({}, food)
+      this.addCountFn(obj)
+    },
+    decrCount(food) {
+      let obj = Object.assign({}, food)
+      this.decrCountFn(obj)
+    },
+    ...mapMutations({
+      setShopList: 'SET_SHOPLIST'
+    }),
+    ...mapActions([
+      'addCountFn',
+      'decrCountFn'
+    ])
   },
   components: {
     Scroll,

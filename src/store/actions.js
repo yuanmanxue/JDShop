@@ -1,45 +1,63 @@
 import * as types from './mutation-type'
-// function deepClone(initalObj, finalObj) {
-//   var obj = finalObj || {}
-//   for (var i in initalObj) {
-//       var prop = initalObj[i]
-//       // 避免相互引用对象导致死循环，如initalObj.a = initalObj的情况
-//       if (prop === obj) {
-//           continue
-//       }
-//       if (typeof prop === 'object') {
-//           obj[i] = (prop.constructor === Array) ? [] : Object.create(prop)
-//       } else {
-//           obj[i] = prop
-//       }
-//   }
-//   return obj
-// }
 export const addCountFn = function ({commit, state}, food) {
   let list = state.shopList.slice()
+  let res = list.map((i) => {
+    return JSON.stringify(i)
+  })
+  let result = unique(res)
+  list = result.map((i) => {
+    return JSON.parse(i)
+  })
   list.forEach((item) => {
     if (food.skuId === item.skuId) {
-      if (!item.count) {
-        item.count = 1
+      if (!food.count) {
+        food.count = 1
       } else {
-        item.count ++
+        food.count ++
       }
+      item = Object.assign(item, food)
+    } else {
+      return false
     }
   })
   commit(types.SET_SHOPLIST, list)
+  let arr = []
+  list.forEach((item) => {
+    if (item.promotLabel === food.promotLabel && item.catId === food.catId && item.storeId === food.storeId) {
+      arr.push(item)
+    }
+  })
+  commit(types.SET_CURRENT_SHOPLIST, arr)
 }
 export const decrCountFn = function ({commit, state}, food) {
-  let list = state.shopList.slice()
+  let list = state.shopList.slice().concat(food)
+  let res = list.map((i) => {
+    return JSON.stringify(i)
+  })
+  let result = unique(res)
+  list = result.map((i) => {
+    return JSON.parse(i)
+  })
   list.forEach((item) => {
     if (food.skuId === item.skuId) {
-      if (!item.count) {
-        item.count = 0
+      if (!food.count) {
+        food.count = 0
       } else {
-        item.count --
+        food.count --
       }
+      item = Object.assign(item, food)
+    } else {
+      return false
     }
   })
   commit(types.SET_SHOPLIST, list)
+  let arr = []
+  list.forEach((item) => {
+    if (item.promotLabel === food.promotLabel && item.catId === food.catId && item.storeId === food.storeId) {
+      arr.push(item)
+    }
+  })
+  commit(types.SET_CURRENT_SHOPLIST, arr)
 }
 export const connectShopList = function ({commit, state}, list) {
   let shopList = state.shopList.slice().concat(list)
@@ -51,17 +69,35 @@ export const connectShopList = function ({commit, state}, list) {
     return JSON.parse(i)
   })
   commit(types.SET_SHOPLIST, shopList)
+}
+export const setCurrentShopListFn = function({commit, state}, list) {
   let arr = []
-  shopList.forEach((item) => {
-    if (item.promotLabel === list[0].promotLabel && item.catId === list[0].catId) {
-      arr.push(item)
-    }
+  let shopList = state.shopList.slice()
+  let res = shopList.map((i) => {
+    return JSON.stringify(i)
   })
+  let result = unique(res)
+  shopList = result.map((i) => {
+    return JSON.parse(i)
+  })
+  shopList.forEach((item) => {
+    list.forEach((listItem) => {
+      if (item.skuId === listItem.skuId) {
+        arr.push(item)
+      }
+    })
+  })
+  // for (let i = 0; i < arr.length; i++) {
+  //       for (let j = i + 1; j < arr.length; j++) {
+  //         console.table(arr)
+  //           if (arr[i].skuId === arr[j].skuId) {
+  //               arr.splice(j, 1)
+  //               i--
+  //           }
+  //       }
+  //   }
   commit(types.SET_CURRENT_SHOPLIST, arr)
 }
-// export const setCurrentShopListFn = function ({commit, state}, list) {
-//   commit(types.SET_CURRENT_SHOPLIST, list)
-// }
 // json数组对象去重
 function unique(arr) {
     var ret = []

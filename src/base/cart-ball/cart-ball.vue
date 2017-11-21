@@ -48,10 +48,10 @@ export default {
   },
   methods: {
     addCount() {
-      this.addCountFn(this.food)
+      this.$emit('addCount')
     },
     decrCount() {
-     this.decrCountFn(this.food)
+      this.$emit('decrCount')
     },
     ...mapActions([
       'addCountFn',
