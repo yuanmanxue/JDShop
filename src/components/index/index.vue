@@ -5,7 +5,8 @@
             :fold="bgWhite"
             :storeSortTexts="storeSortTexts"
             :rankType="rankType"
-            @change-rank-type="changeRankType">
+            @change-rank-type="changeRankType"
+            @selectRankType="selectRankType">
   </SearchBar>
   <div class="scroll" ref="scrollWrap">
     <scroll class="scroll-wrap" :data="shopData" ref="scroll" @scroll="scroll" :probe-type="probeType" :listen-scroll="listenScroll">
@@ -67,10 +68,12 @@
             </Slider>
           </div>
         </div>
-        <div class="load-wrap" v-show="!shopData">
-          <load></load>
-        </div>
+        <!-- 商铺列表 -->
         <div ref="shopList">
+          <!-- 正在加载 -->
+          <div class="load-wrap" v-show="!shopData.length">
+            <load></load>
+          </div>
           <Shop :data="shopData" :footerTitle="shopTitle" @select-shop="selectShop"></Shop>
         </div>
       </div>
@@ -120,6 +123,7 @@ export default {
     this._getShop(this.rankType)
   },
   methods: {
+    // 获取轮播数据
     _getSlider() {
       getSlider().then((res) => {
         if (res.code === ERR_OK) {
@@ -138,6 +142,7 @@ export default {
         }
       })
     },
+    // 获取商铺信息数据
     _getShop(rankType, page) {
       getShop(rankType, page).then((res) => {
         if (res.code === ERR_OK) {
@@ -153,6 +158,7 @@ export default {
       //   this.shopTitle = res.data.result.data.floorTitle
       // })
     },
+    // 每个商店动态路由跳转
     selectShop(shop) {
       this.shopClass.forEach((item) => {
         if (item.params.storeId === shop.floorCellData.params.storeId) {
@@ -163,6 +169,7 @@ export default {
         }
       })
     },
+    // 规范化商铺列表数据
     _normalizeShop(list) {
       let ret = []
       list.forEach((item) => {
@@ -171,6 +178,7 @@ export default {
       })
       return ret
     },
+    // 监听scroll是否滚动
     scroll(pos) {
       if (pos.y < SCROLLTOP) {
         this.bgWhite = true
@@ -186,23 +194,30 @@ export default {
         this.flag = false
       }
     },
+    // 点击rankType 还在不同的商铺并且商铺列表滚到头部
     scrollToTop() {
       let h = this.$refs.shopList.offsetTop
       let scrollH = -h + SEARCHBARHEIGHT
       this.$refs.scroll.scrollTo(0, scrollH)
     },
+    // rankType改变，重新请求接口信息
     changeRankType(newData) {
       this.rankType = newData
       this.shopData = []
       this.page = 1
       this._getShop(this.rankType, this.page)
     },
+    // 滚动加载
     getMoreData() {
       if (this.flag) {
         console.log(this.page)
         this.page += 1
         this._getShop(this.rankType, this.page)
       }
+    },
+    // 监听子组件点击事件
+    selectRankType() {
+      this.scrollToTop()
     },
     ...mapMutations({
       setShop: 'SET_SHOP'
@@ -217,8 +232,8 @@ export default {
     Load
   },
   watch: {
-    rankType() {
-      this.scrollToTop()
+    rankType(newData) {
+      this.rankType = newData
     },
     flag() {
       this.getMoreData()
@@ -261,6 +276,9 @@ export default {
       padding-top: 8px;
     }
   }
+}
+.load-wrap{
+  margin-top:30px;
 }
 .footer-slider{
   .slider-wrapper{

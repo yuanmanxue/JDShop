@@ -73,6 +73,7 @@ export const connectShopList = function ({commit, state}, list) {
 export const setCurrentShopListFn = function({commit, state}, list) {
   let arr = []
   let shopList = state.shopList.slice()
+  // let currentList = state.currentShopList.slice()
   let res = shopList.map((i) => {
     return JSON.stringify(i)
   })
@@ -87,16 +88,27 @@ export const setCurrentShopListFn = function({commit, state}, list) {
       }
     })
   })
-  // for (let i = 0; i < arr.length; i++) {
-  //       for (let j = i + 1; j < arr.length; j++) {
-  //         console.table(arr)
-  //           if (arr[i].skuId === arr[j].skuId) {
-  //               arr.splice(j, 1)
-  //               i--
-  //           }
-  //       }
-  //   }
+  let res2 = arr.map((i) => {
+    return JSON.stringify(i)
+  })
+  let result2 = unique(res2)
+  arr = result2.map((i) => {
+    return JSON.parse(i)
+  })
   commit(types.SET_CURRENT_SHOPLIST, arr)
+}
+export const addCartListFn = function({commit, state}, storeId) {
+  let list = state.shopList.slice()
+  console.log(storeId)
+  let ret = []
+  list.forEach((item) => {
+    if (item.count > 0) {
+      if (item.storeId === storeId) {
+        ret.push(item)
+      }
+    }
+  })
+  commit(types.SET_ADDCAT_LIST, ret)
 }
 // json数组对象去重
 function unique(arr) {

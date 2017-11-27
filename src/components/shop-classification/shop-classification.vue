@@ -3,12 +3,14 @@
     <div class="menu-scroll-wrap">
       <menuScroll :data="data" @selectMenuParent="selectMenuParent" @selectMenuChild="selectMenuChild"></menuScroll>
     </div>
-    <div class="shop-list" v-if="!childShow">
+    <div class="shop-list" v-if="!childShow" ref="shopListWrap">
         <!-- <div class="banner">
           <img :src="item.imgUrl" alt="" v-for="item in banner">
         </div> -->
         <keep-alive>
-          <ShopList ref="shopList"></ShopList>
+          <ShopList
+          ref="shopList" :currentList="currentShopList"
+          :titleShow="true" @scroll="scrollFn"></ShopList>
         </keep-alive>
     </div>
   </div>
@@ -22,6 +24,8 @@ import {createFood} from 'common/js/food.js'
 import {getShopDetail} from 'api/shop-detail.js'
 import {mapGetters, mapMutations, mapActions} from 'vuex'
 import {ERR_OK} from 'api/config.js'
+const CURRENT_TAG_HEIGHT = 30
+const GET_MORE_FLAG_NUM = 350
 export default {
   data() {
     return {
@@ -32,7 +36,9 @@ export default {
       promotLabel: '',
       tagTitle: '',
       totalCount: '',
-      shopLists: null
+      shopLists: null,
+      page: 1,
+      getMoreFlag: false
     }
   },
   props: {
@@ -46,6 +52,7 @@ export default {
     }
   },
   created() {
+    // 刷新跳回index页面
     if (!this.shop.params) {
       this.$router.push({path: '/index'})
       return false
@@ -61,8 +68,9 @@ export default {
     ])
   },
   methods: {
-    _getShopDetail(storeId, promotLable, catId) {
-      getShopDetail(storeId, promotLable, catId).then((res) => {
+    // 获取商铺详情信息
+    _getShopDetail(storeId, promotLable, catId, page) {
+      getShopDetail(storeId, promotLable, catId, page).then((res) => {
         if (res.code === ERR_OK) {
           let food = []
           this.shopLists = res.result.searchResultVOList
@@ -79,13 +87,26 @@ export default {
             this.connectShopList(food)
           }
           // vuex存储currentShopList
+          if (this.page > 1) {
+            let arr = []
+            let foodFB = food.concat(this.currentShopList)
+            foodFB.forEach((item) => {
+              if (item.promotLabel === this.promotLabel && item.catId === this.catId && item.storeId === this.shop.params.storeId) {
+                arr.push(item)
+                food = arr
+              }
+            })
+          }
           this.setCurrentShopListFn(food)
+          this.addCartListFn(this.shop.params.storeId)
         }
       }).then(() => {
+          // vuex存储 当前先是列表的tagTitle和totalCount
         this.setCurrentTagTitle(this.tagTitle)
         this.setTotalCount(this.totalCount)
       })
     },
+    // 规范化商铺每个商品的信息，每个商品添加catId,tagTitlehe totalCount
     _normalizeFood(list, promotLabel, tagTitle, totalCount, catId) {
       let ret = []
       list.forEach((item) => {
@@ -100,10 +121,12 @@ export default {
     }),
     ...mapActions([
       'connectShopList',
-      'setCurrentShopListFn'
+      'setCurrentShopListFn',
+      'addCartListFn'
     ]),
     selectMenuParent(i) {
       this.iNum = i
+      this.page = 1
       if (this.data[this.iNum].childCategoryList.length === 0) {
         this.catId = this.data[this.iNum].catId
         this.promotLabel = this.data[this.iNum].promotLabel
@@ -116,23 +139,38 @@ export default {
       console.log(this.catId)
       let flag = this.judgeToLoad()
       if (!flag) {
-        this._getShopDetail(this.shop.params.storeId, this.promotLabel, this.catId)
+        this._getShopDetail(this.shop.params.storeId, this.promotLabel, this.catId, this.page)
       }
-      // this._getShopDetail(this.shop.params.storeId, this.promotLabel, this.catId)
       this.$refs.shopList.scrollToTop()
     },
     selectMenuChild(j) {
       this.jNum = j
+      this.page = 1
       this.catId = this.data[this.iNum].childCategoryList[this.jNum].catId
       this.promotLabel = this.data[this.iNum].childCategoryList[this.jNum].promotLabel
       this.tagTitle = this.data[this.iNum].childCategoryList[this.jNum].title
       let flag = this.judgeToLoad()
       if (!flag) {
-        this._getShopDetail(this.shop.params.storeId, this.promotLabel, this.catId)
+        this._getShopDetail(this.shop.params.storeId, this.promotLabel, this.catId, this.page)
       }
       console.log(this.catId)
-      // this._getShopDetail(this.shop.params.storeId, this.promotLabel, this.catId)
       this.$refs.shopList.scrollToTop()
+    },
+    scrollFn(pos, h1) {
+      let h = -h1 + this.$refs.shopListWrap.clientHeight - CURRENT_TAG_HEIGHT
+      if (pos.y - GET_MORE_FLAG_NUM < h) {
+        this.getMoreFlag = true
+      } else {
+        this.getMoreFlag = false
+      }
+    },
+    // 滚动加载
+    getMoreData() {
+      if (this.getMoreFlag) {
+        this.page += 1
+        console.log(this.page)
+        this._getShopDetail(this.shop.params.storeId, this.promotLabel, this.catId, this.page)
+      }
     },
     // 在vuex里面通过对shopList里面的数据遍历判断是否存在 promotLabel&&catId 相同字段的数据，存在返回true，不存在返回false
     judgeToLoad() {
@@ -153,7 +191,7 @@ export default {
     },
     changeTotalNum() {
       this.setCurrentTagTitle(this.tagTitle)
-      this.setTotalCount(this.totalCount)
+      this.setTotalCount(this.currentShopList[0].totalCount)
     }
   },
   components: {
@@ -173,6 +211,9 @@ export default {
         this.tagTitle = this.data[this.iNum].childCategoryList[this.jNum].title
       }
       this._getShopDetail(this.shop.params.storeId, this.promotLabel, this.catId)
+    },
+    getMoreFlag() {
+      this.getMoreData()
     }
   }
 }

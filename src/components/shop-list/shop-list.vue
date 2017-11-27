@@ -1,10 +1,10 @@
 <template>
-<div class="">
-  <div class="shop-title">{{currentTagTitle}} ({{totalCount}})</div>
-  <Scroll class="shop-list-wrap" :data="currentShopList" ref="scrollShopList" :probe-type="probeType" :listen-scroll="listenScroll">
-    <div class="shop-list">
+<div>
+  <div class="shop-title" v-if="titleShow">{{currentTagTitle}} ({{totalCount}})</div>
+  <Scroll class="shop-list-wrap" :data="currentList" ref="scrollShopList" :probe-type="probeType" :listen-scroll="listenScroll" @scroll="scroll">
+    <div class="shop-list" ref="shopList">
       <ul>
-        <li v-for="(item, index) in currentShopList" ref="shopListItem">
+        <li v-for="(item, index) in currentList" ref="shopListItem">
           <img v-lazy="item.imgUrl" v-if="item.imgUrl" class="left">
           <div class="right">
             <p class="name">{{item.skuName}}</p>
@@ -27,7 +27,7 @@
     </div>
   </Scroll>
   <div class="shop-cart-wrap">
-    <shopCart :food="currentFood"></shopCart>
+    <shopCart></shopCart>
   </div>
 </div>
 </template>
@@ -45,6 +45,14 @@ export default {
     }
   },
   props: {
+    currentList: {
+      type: Array,
+      default: null
+    },
+    titleShow: {
+      type: Boolean,
+      default: false
+    }
   },
   created() {
     this.probeType = 3
@@ -59,7 +67,7 @@ export default {
       'currentShopList'
     ]),
     noMore() {
-      if (this.currentShopList.length === this.totalCount && this.currentShopList.length < 10) {
+      if (this.currentShopList.length === this.totalCount || this.currentShopList.length < 10) {
         return true
       } else {
         return false
@@ -73,17 +81,25 @@ export default {
     addCount(food) {
       let obj = Object.assign({}, food)
       this.addCountFn(obj)
+      this.addCartListFn(obj.storeId)
     },
     decrCount(food) {
       let obj = Object.assign({}, food)
       this.decrCountFn(obj)
+      this.addCartListFn(obj.storeId)
+    },
+    // 监听scroll是否滚动
+    scroll(pos) {
+      let h1 = this.$refs.shopList.clientHeight
+      this.$emit('scroll', pos, h1)
     },
     ...mapMutations({
       setShopList: 'SET_SHOPLIST'
     }),
     ...mapActions([
       'addCountFn',
-      'decrCountFn'
+      'decrCountFn',
+      'addCartListFn'
     ])
   },
   components: {
@@ -122,7 +138,7 @@ export default {
     background-color:#f4f4f4;
     border-top: 1px solid #ddd;
     color:$color-text-nav;
-    z-index:130;
+    z-index:110;
   }
   .shop-list{
     li{

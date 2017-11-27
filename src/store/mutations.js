@@ -15,6 +15,9 @@ const mutations = {
   },
   [types.SET_CURRENT_SHOPLIST](state, currentShopList) {
     state.currentShopList = currentShopList
+  },
+  [types.SET_ADDCAT_LIST](state, addCatList) {
+    state.addCatList = addCatList
   }
 }
 export default mutations

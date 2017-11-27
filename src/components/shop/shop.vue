@@ -1,11 +1,12 @@
 <template>
 <div>
-  <div class="shop-title-wrap">——<span class="shop-title">{{footerTitle.floorName}}</span>——</div>
+  <div class="shop-title-wrap" v-if='data.length'>——<span class="shop-title">{{footerTitle.floorName}}</span>——</div>
   <ul class="shop-wrap" v-if='data.length'>
     <li class="shop" v-for="item in data" @click="selectShop(item)">
       <div class="shop-avator">
         <img v-lazy="item.floorCellData.imgUrl" v-if='item.floorCellData.imgUrl'>
-        <img src="./newLoading.gif" alt="" v-if='!item.floorCellData.imgUrl'>
+        <img src="./newLoading.gif" alt="" v-else>
+        <!-- <i class="icon-count">{{totalCount}}</i> -->
       </div>
       <div class="info">
         <p class="name">{{item.floorCellData.name}}</p>
@@ -27,7 +28,7 @@
 <script type="text/ecmascript-6">
 import Star from 'base/star/star'
 import ShopTags from 'base/shop-tags/shop-tags'
-// import {mapMutations} from 'vuex'
+import {mapGetters} from 'vuex'
 export default {
   data() {
     return {
@@ -48,6 +49,16 @@ export default {
     // console.log(this.data)
   },
   computed: {
+    ...mapGetters([
+      'addCatList'
+    ]),
+    totalCount() {
+      let count = 0
+      this.addCatList.forEach((item) => {
+        count += item.count
+      })
+      return count
+    }
   },
   methods: {
     onToggleShow(newData) {
@@ -100,10 +111,28 @@ export default {
       border-bottom:1px solid #eee;
       .shop-avator{
         margin-right:10px;
+        position:relative;
         img{
           width: 1.7rem;
           border:1px solid #eee;
           border-radius:5px;
+        }
+        .icon-count{
+          position:absolute;
+          display:inline-block;
+          right:-8px;
+          top:-8px;
+          min-width:15px;
+          height:19px;
+          border:3px solid #fff;
+          border-radius:50%;
+          color:#fff;
+          line-height:19px;
+          font-size:$font-size-small-s;
+          font-style:normal;
+          text-align:center;
+          padding:0 2px;
+          background-color: $color-background-red;
         }
       }
       .info{
@@ -147,5 +176,10 @@ export default {
         }
       }
     }
+  }
+</style>
+<style media="screen">
+  a{
+    position: relative;
   }
 </style>

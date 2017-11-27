@@ -3,7 +3,8 @@ const state = {
   shopList: [],
   currentTagTitle: '',
   currentShopList: [],
-  totalCount: ''
+  totalCount: '',
+  addCatList: []
 }
 export default state
 // shop 店铺信息
@@ -11,3 +12,4 @@ export default state
 // shopList 所有加载过列表的元素
 // currentTagTitle 当前列表的标签
 // totalCount 当前列表一共有多少数据
+// addCatList购物车列表

@@ -113,24 +113,24 @@ export default {
   font-size: 12px;
 }
 .move-enter-active {
-  transform: translate3d(0px, 0, 0) rotate(180deg);
+  transform: translate3d(0px, 0, 0);
   opacity: 1;
 }
 .move-enter {
-  transform: translate3d(-20px, 0, 0) rotate(0deg);
+  transform: translate3d(-20px, 0, 0);
   opacity: 0;
 }
 .move-leave {
   opacity: 1;
-  transform: translate3d(0px, 0, 0) rotate(0deg);
+  transform: translate3d(0px, 0, 0);
 }
 .move-leave-active {
-  transform: translate3d(-10px, 0, 0) rotate(180deg);
+  transform: translate3d(-10px, 0, 0);
   opacity: 0;
 }
 .move-enter-active,
 .move-leave-active {
-  transition: all 0.2s;
+  transition: all 0.1s;
 }
 .ball-wrap{
   .ball{

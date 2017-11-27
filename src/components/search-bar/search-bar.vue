@@ -59,6 +59,7 @@ export default {
     selectRankType(index) {
       this.myRankType = index
       this.rankShow = !this.rankShow
+      this.$emit('selectRankType', index)
     }
   },
   watch: {

@@ -1,6 +1,6 @@
 import {commonParams} from './config.js'
 import axios from 'axios'
-export function getShopDetail(storeId, promotLable, catId) {
+export function getShopDetail(storeId, promotLable, catId, page) {
   const url = '/api/getSlider'
   const data = Object.assign({}, commonParams, {
     _djrandom: 150969839421253,
@@ -10,7 +10,7 @@ export function getShopDetail(storeId, promotLable, catId) {
       'catId': catId,
       'storeId': storeId,
       'sortType': 1,
-      'page': 1,
+      'page': page,
       'pageSize': 10,
       'promotLable': promotLable,
       'cartUuid': ''
