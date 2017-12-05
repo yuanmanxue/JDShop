@@ -5,11 +5,14 @@
   <transition name="move">
     <div class="cart-decr" v-show="food.count>0" @click="decrCount"></div>
   </transition>
-  <div class="ball-wrap">
-    <div class="ball" v-for="ball in balls" name="drop" ref="ball">
-      <div class="inner" v-show="ball.show" ref="innerBall"></div>
+  <transition name="drop">
+    <div class="ball-wrap">
+      <div class="ball" v-for="ball in balls" name="drop" ref="ball">
+        <div class="inner" v-show="ball.show"
+         ref="innerBall"></div>
+      </div>
     </div>
-  </div>
+  </transition>
 </div>
 </template>
 
@@ -20,7 +23,9 @@ export default {
     return {
       balls: [
         {
-          show: false
+          show: true,
+          x: 0,
+          y: 0
         },
         {
           show: false
@@ -48,6 +53,8 @@ export default {
   },
   methods: {
     addCount() {
+      // this.balls[0].show = true
+      this.drop()
       this.$emit('addCount')
     },
     decrCount() {
@@ -56,22 +63,45 @@ export default {
     ...mapActions([
       'addCountFn',
       'decrCountFn'
-    ])
-    // drop() {
-    //   let inner = this.$refs.innerBall[0]
-    //   console.log(inner)
+    ]),
+    drop() {
+      console.log('sss')
+      let inner = this.$refs.innerBall[0]
+      let w = inner.clientWidth
+      // console.log(inner)
+      // console.log(w)
     //   let ball = this.$refs.ball[0]
     //   console.log(ball)
-    //   let rect = inner.getBoundingClientRect()
-    //   let x = rect.left - 32
-    //   let y = -(window.innerHeight - rect.top - 22)
+      let rect = inner.getBoundingClientRect()
+      console.log(rect)
+      this.balls[0].x = rect.left
+      this.balls[0].y = -(window.innerHeight - rect.top - w / 2)
+      // console.log(this.balls[0].x)
+      // console.log(this.balls[0].y)
     //   ball.style.webkitTransform = `translate3d(0, ${y}px, 0)`
     //   ball.style.transform = `translate3d(0,${y}px,0)`
     //   inner.style.webkitTransform = `translate3d(${x}px, 0, 0)`
     //   inner.style.transform = `translate3d(${x}px, 0, 0)`
     //   console.log(x)
     //   console.log(y)
-    // }
+    //
+    //     // 设置过渡进入之前的组件状态
+  },
+  beforeEnter: function(el) {
+    // ...
+    // let inner = this.$refs.innerBall[0]
+    // inner.style.transform = `translate3d(${this.balls[0].x}px, 0, 0)`
+    // inner.style.transform = `translate3d(0,${this.balls[0].y}px,0)`
+  },
+  // 设置过渡进入完成时的组件状态
+  enter: function(el, done) {
+    // ...
+    done()
+  },
+  // 设置过渡进入完成之后的组件状态
+  afterEnter: function(el) {
+    // ...
+  }
     // ...mapMutations({
     //   setShopCount: 'SET_SHOPLIST'
     // })
@@ -87,28 +117,30 @@ export default {
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable.styl"
 .cartcontrol {
-  width: 75px;
-  height: 25px;
+  width: 2.4rem;
+  height:.8rem;
 }
 .cartcontrol .cart-decr,
 .cartcontrol .cart-num,
 .cartcontrol .cart-add {
   display: inline-block;
-  background-size: 25px 25px;
-  width: 25px;
-  height: 25px;
+  background-size: .8rem .8rem;
+  width: .8rem;
+  height:.8rem;
   float: left;
   background-repeat: no-repeat;
 }
 .cartcontrol .cart-decr {
   background-image: url(desc.png);
+  background-color: #ffffff;
 }
 .cartcontrol .cart-add {
   background-image: url(add.png);
+    background-color: #ffffff;
 }
 .cartcontrol .cart-num {
   font-size: 12px;
-  line-height: 26px;
+  line-height: .8rem;
   text-align: center;
   font-size: 12px;
 }
@@ -132,36 +164,28 @@ export default {
 .move-leave-active {
   transition: all 0.1s;
 }
+// 点击加入购物车的小球
 .ball-wrap{
+  position: absolute;
+  left: 0.1rem;
+  top: 0.1rem;
+  width: .6rem;
+  height: .6rem;
+  border-radius:50%;
+  z-index: -1;
   .ball{
-    position: fixed;
-    bottom:20px;
-    left:20px;
-    z-index:110;
+    // position: fixed;
+    // bottom:20px;
+    // left:20px;
+    // z-index:110;
   }
   .inner{
     display: block;
-    width: 25px;
-    height: 25px;
+    width: .6rem;
+    height: .6rem;
     border-radius:50%;
     background-color:$color-background-green;
-    transition: all 0.4s;
   }
 }
-@media only screen and (max-width: 321px) {
-  .cartcontrol {
-    width: 60px;
-    height: 20px;
-  }
-  .cartcontrol .cart-decr,
-  .cartcontrol .cart-num,
-  .cartcontrol .cart-add {
-    width: 20px;
-    height: 20px;
-    background-size: 20px 20px;
-  }
-  .cartcontrol .cart-num {
-    line-height: 20px;
-  }
-}
+
 </style>

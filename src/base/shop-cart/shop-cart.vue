@@ -1,6 +1,6 @@
 <template>
     <div class="">
-      <div class="mask" v-show="showList" @click="showListFn"></div>
+      <div class="mask" v-show="addCatList.length > 0 && showList" @click="showListFn"></div>
       <div>
         <div class="shop-cart">
           <div class="left-ball" @click="showListFn">
@@ -11,6 +11,7 @@
           <div class="right" :class="{'active': totalCount > 0}">去结算</div>
         </div>
         <!-- <div class="total-count-txt" v-show="addCatList.length">全部商品</div> -->
+        <!-- 购物车中商品的内容 -->
           <Scroll :data="addCatList" class="add-cart-list" v-show="showList" :probe-type="probeType" :listen-scroll="listenScroll" ref="addCartListScroll">
             <div class="shop-list">
               <ul>
@@ -129,7 +130,7 @@ export default {
     right:0;
     bottom:48px;
     // top:500px;
-    z-index:-1;
+    z-index:101;
     max-height:70%;
     overflow:hidden;
     background-color:#fff;
@@ -143,6 +144,7 @@ export default {
     // }
   }
   .shop-list{
+    border-top:1px solid #eee;
     li{
       display: flex;
       padding:.26666667rem .26666667rem;
@@ -152,7 +154,9 @@ export default {
     & .left{
       width:1.33333333rem;
       height:1.33333333rem;
-      padding:0 .26666667rem;
+      padding:.16666667rem;
+      margin-right: .2rem;
+      border: 1px solid #eee;
     }
     .right{
       flex:auto;
@@ -219,14 +223,15 @@ export default {
         }
       }
       .num{
-        position: absolute;
+        position: fixed;
         display: inline-block;
         padding:0 6px;
         height: 16px;
         border-radius:8px;
         line-height: 16px;
         left:40px;
-        top:-10px;
+        bottom:40px;
+        z-index:151;
         background-color: $color-background-orange;
         font-style:normal;
         font-size:$font-size-small-s;
@@ -237,9 +242,9 @@ export default {
         }
       }
       .cart{
-        position: absolute;
+        position: fixed;
         left:15px;
-        bottom:8px;
+        bottom:4px;
         display: inline-block;
         width: 40px;
         height: 40px;
@@ -249,13 +254,14 @@ export default {
         background-color: #bebebe;
         border-radius:20px;
         line-height: 40px;
+        z-index: 150;
         &.active{
           width:50px;
           height: 50px;
           font-size:25px;
           border-radius:25px;
           line-height: 50px;
-          bottom:8px;
+          bottom:4px;
           left:8px;
           background-color: $color-background-green;
         }
@@ -264,11 +270,12 @@ export default {
   }
   .mask{
     position:fixed;
+    width:100%;
     top:0;
     left:0;
     right:0;
     bottom:48px;
-    z-index:-3;
+    z-index:101;
     background:rgba(0,0,0,0.5)
   }
 

@@ -41,6 +41,23 @@ apiRouter.get('/getSlider', function (req, res) {
     console.log(e)
   })
 })
+apiRouter.post('/postSlider', function (req, res) {
+  var url = 'https://daojia.jd.com/client'
+  axios.post(url, {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+      referer: 'https://daojia.jd.com/html/index.html',
+      host: 'daojia.jd.com',
+      'Cache-Control': 'max-age=0',
+      'x-requested-with': 'XMLHttpRequest'
+    },
+    data: req.query
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
 // 获取商铺数据
 var getShop = require('../shopData.json')
 apiRouter.get('/getShop', function (req, res) {

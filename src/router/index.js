@@ -5,8 +5,9 @@ import Classify from '@/components/classify/classify.vue'
 import ShoppingCart from '@/components/shopping-cart/shopping-cart.vue'
 import Indent from '@/components/indent/indent.vue'
 import ShopDetail from '@/components/shop-detail/shop-detail.vue'
+import SearchDetail from '@/components/search-detail/search-detail'
 import Mine from '@/components/mine/mine.vue'
-import Map from 'base/map/map'
+import Map from '@/base/map/map'
 Vue.use(Router)
 
 export default new Router({
@@ -49,6 +50,11 @@ export default new Router({
       path: '/map',
       name: 'Map',
       component: Map
+    },
+    {
+      path: '/searchdetail',
+      name: 'SearchDetail',
+      component: SearchDetail
     }
   ]
 })

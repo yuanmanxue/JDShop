@@ -6,7 +6,7 @@
       <div class="shop-avator">
         <img v-lazy="item.floorCellData.imgUrl" v-if='item.floorCellData.imgUrl'>
         <img src="./newLoading.gif" alt="" v-else>
-        <!-- <i class="icon-count">{{totalCount}}</i> -->
+        <i class="icon-count">{{totalCount}}</i>
       </div>
       <div class="info">
         <p class="name">{{item.floorCellData.name}}</p>
@@ -55,6 +55,7 @@ export default {
     totalCount() {
       let count = 0
       this.addCatList.forEach((item) => {
+        // item.skuId
         count += item.count
       })
       return count

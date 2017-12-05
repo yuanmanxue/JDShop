@@ -9,7 +9,7 @@ export const addCountFn = function ({commit, state}, food) {
     return JSON.parse(i)
   })
   list.forEach((item) => {
-    if (food.skuId === item.skuId) {
+    if (food.skuId === item.skuId && item.catId === food.catId) {
       if (!food.count) {
         food.count = 1
       } else {
@@ -83,7 +83,7 @@ export const setCurrentShopListFn = function({commit, state}, list) {
   })
   shopList.forEach((item) => {
     list.forEach((listItem) => {
-      if (item.skuId === listItem.skuId) {
+      if (item.skuId === listItem.skuId && item.catId === listItem.catId) {
         arr.push(item)
       }
     })

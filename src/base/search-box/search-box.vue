@@ -1,7 +1,8 @@
 <template>
   <div class="search-box-wrap">
-    <input type="text" ref="searchText" id="input" placeholder="请输入地址" />
+    <input type="text" ref="searchText" id="input" placeholder="搜索附近的商品和门店" @focus="goToSearch" :value="msg"/>
     <i class="iconfont search-icon">&#xe612;</i>
+    <div class="">{{msg}}</div>
     <!-- <span>搜索</span> -->
   </div>
 </template>
@@ -9,8 +10,17 @@
 <script type="text/ecmascript-6">
 
 export default {
+  data() {
+    return {
+      msg: 'default'
+    }
+  },
+  methods: {
+    goToSearch() {
+      this.$router.push('./searchdetail')
+    }
+  },
   components: {
-
   }
 }
 </script>
@@ -25,8 +35,9 @@ export default {
     border-bottom: 1px solid #ddd;
     input{
       width: 95%;
-      height: 28px;
-      margin: 5px 2.5%;
+      height: 30px;
+      line-height: 30px;
+      margin: 5px;
       border-radius: 5px;
       background-color: #fff;
       font-size:$font-size-small;
@@ -40,7 +51,7 @@ export default {
       height: 28px;
       font-size:22px;
       line-height: 28px;
-      top:5px;
+      top:7px;
       text-align:center;
       color:$color-text-gray;
     }

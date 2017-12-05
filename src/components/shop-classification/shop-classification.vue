@@ -7,11 +7,11 @@
         <!-- <div class="banner">
           <img :src="item.imgUrl" alt="" v-for="item in banner">
         </div> -->
-        <keep-alive>
-          <ShopList
-          ref="shopList" :currentList="currentShopList"
-          :titleShow="true" @scroll="scrollFn"></ShopList>
-        </keep-alive>
+          <ShopList ref="shopList" :titleShow="true" @scroll="scrollFn"></ShopList>
+    </div>
+    <!-- 底部购物车 -->
+    <div class="shop-cart-wrap">
+      <shopCart></shopCart>
     </div>
   </div>
 </template>
@@ -20,6 +20,7 @@
 import menuScroll from 'base/menu-scroll/menu-scroll'
 import ShopList from 'components/shop-list/shop-list'
 import Scroll from 'base/scroll/scroll'
+import shopCart from 'base/shop-cart/shop-cart'
 import {createFood} from 'common/js/food.js'
 import {getShopDetail} from 'api/shop-detail.js'
 import {mapGetters, mapMutations, mapActions} from 'vuex'
@@ -197,7 +198,8 @@ export default {
   components: {
     Scroll,
     ShopList,
-    menuScroll
+    menuScroll,
+    shopCart
   },
   watch: {
     data(newData) {
@@ -245,5 +247,15 @@ export default {
       width: 100%;
       margin-bottom:5px;
     }
+  }
+  .shop-cart-wrap{
+    position: fixed;
+    height: 49px;
+    left:0;
+    right:0;
+    bottom:0;
+    z-index:101;
+    border-top: 1px solid #d9d9d9;
+    background-color: #fff;
   }
 </style>

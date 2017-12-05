@@ -91,7 +91,7 @@ export default {
     bottom:0px;
     top: 0px;
     overflow: hidden;
-    z-index:100;
+    // z-index:100;
     background-color: #f4f4f4;
     .shop-detail{
       background-color: #ffffff;

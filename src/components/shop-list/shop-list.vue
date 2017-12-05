@@ -1,10 +1,14 @@
 <template>
 <div>
-  <div class="shop-title" v-if="titleShow">{{currentTagTitle}} ({{totalCount}})</div>
-  <Scroll class="shop-list-wrap" :data="currentList" ref="scrollShopList" :probe-type="probeType" :listen-scroll="listenScroll" @scroll="scroll">
+  <!-- 正在加载 -->
+  <div class="load-wrap"><load v-show="!currentShopList.length"></load></div>
+  <!-- 标签数量 -->
+  <div class="shop-title" v-show="totalCount">{{currentTagTitle}} ({{totalCount}})</div>
+  <!-- 商品列表 -->
+  <Scroll class="shop-list-wrap" :data="currentShopList" ref="scrollShopList" :probe-type="probeType" :listen-scroll="listenScroll" @scroll="scroll">
     <div class="shop-list" ref="shopList">
       <ul>
-        <li v-for="(item, index) in currentList" ref="shopListItem">
+        <li v-for="(item, index) in currentShopList" ref="shopListItem">
           <img v-lazy="item.imgUrl" v-if="item.imgUrl" class="left">
           <div class="right">
             <p class="name">{{item.skuName}}</p>
@@ -23,19 +27,16 @@
           </div>
         </li>
       </ul>
-      <div class="no-more" v-show="noMore">—— 去看看其他分类吧 ——</div>
+      <div class="no-more" v-show="noMore && currentShopList.length > 0">—— 去看看其他分类吧 ——</div>
     </div>
   </Scroll>
-  <div class="shop-cart-wrap">
-    <shopCart></shopCart>
-  </div>
 </div>
 </template>
 <script type="text/ecmascript-6">
 import Scroll from 'base/scroll/scroll'
+import load from 'base/load/load'
 import iconText from 'base/iconText/iconText'
 import cartBall from 'base/cart-ball/cart-ball'
-import shopCart from 'base/shop-cart/shop-cart'
 import {mapGetters, mapActions, mapMutations} from 'vuex'
 export default {
   data() {
@@ -45,14 +46,6 @@ export default {
     }
   },
   props: {
-    currentList: {
-      type: Array,
-      default: null
-    },
-    titleShow: {
-      type: Boolean,
-      default: false
-    }
   },
   created() {
     this.probeType = 3
@@ -67,12 +60,13 @@ export default {
       'currentShopList'
     ]),
     noMore() {
-      if (this.currentShopList.length === this.totalCount || this.currentShopList.length < 10) {
-        return true
-      } else {
-        return false
+      console.log(this.currentShopList.length)
+        if (this.currentShopList.length === this.totalCount || this.currentShopList.length < 10) {
+          return true
+        } else {
+          return false
+        }
       }
-    }
   },
   methods: {
     scrollToTop() {
@@ -106,7 +100,7 @@ export default {
     Scroll,
     iconText,
     cartBall,
-    shopCart
+    load
   },
   watch: {
     shopList(newData) {
@@ -118,12 +112,18 @@ export default {
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable.styl"
+  .load-wrap{
+    margin-top: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
   .shop-list-wrap{
     position: fixed;
     left: 85px;
     right:0;
     top:180px;
     bottom:50px;
+    z-index:100;
     overflow: hidden;
   }
   .shop-title{
@@ -187,16 +187,6 @@ export default {
         color:$color-text-gray;
       }
     }
-  }
-  .shop-cart-wrap{
-    position: fixed;
-    height: 49px;
-    left:0;
-    right:0;
-    bottom:0;
-    z-index:110;
-    border-top: 1px solid #d9d9d9;
-    background-color: #fff;
   }
   .no-more{
     height: 30px;

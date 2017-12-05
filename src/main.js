@@ -29,5 +29,5 @@ AMap.initAMapApiLoader({
   // 申请的高德key
   key: '1f648c12a2709a14b0e79551fdc5f791',
   // 插件集合
-  plugin: ['AMap.PlaceSearch', 'AMap.Geolocation']
+  plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor', 'AMap.MouseTool', 'AMap.Geolocation']
 })

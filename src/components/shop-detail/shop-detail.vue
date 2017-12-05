@@ -80,13 +80,10 @@ export default {
     width: 100%;
     top: 0;
     bottom:0;
-    z-index:100;
+    z-index:200;
     background-color: #ffffff;
     .search{
       margin-top:110px;
-    }
-    .shopClassification{
-
     }
   }
 

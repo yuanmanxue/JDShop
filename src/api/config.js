@@ -1,7 +1,7 @@
 
 export const commonParams = {
   platCode: 'H5',
-  appVersion: '4.7.0',
+  appVersion: '4.9.0',
   appName: 'paidaojia'
 }
 

@@ -3,7 +3,7 @@
   <div class="map-wrap">
     <div id="map">
       <div class="map-search">
-        <input type="text" ref="searchText" id="input" placeholder="请输入地址" /><span @click="keyUpSearch">搜索</span>
+        <input type="text" ref="searchText" id="input" placeholder="请输入地址" @keyup="keyUpSearch"/><span @click="keyUpSearch">搜索</span>
       </div>
       <div id="container" style="width:100%; height:88%"></div>
       <Scroll ref="scroll" class="map-scroll" :data="searchData">
@@ -17,7 +17,7 @@
 <script>
 import Scroll from 'base/scroll/scroll'
 // import AMap from 'AMap'
-var map
+var map, geolocation
 var num = []
 var result = []
 export default {
@@ -37,47 +37,65 @@ export default {
       num: num,
       searchData: [],
       page: 10,
-      show: false
+      show: false,
+      txt: ''
     }
   },
-  created() {
-  },
+  created() {},
   methods: {
     init: function() {
       map = new AMap.Map('container', {
+        mapStyle: 'amap://styles/macaron',
         center: [121.5463, 29.80923],
-        resizeEnable: false,
+        resizeEnable: true,
         zoom: 12
       })
       this.center = map.center
-      AMap.plugin(['AMap.Geolocation', 'AMap.PlaceSearch', 'AMap.ToolBar'],
-        function() {
-          map.addControl(new AMap.ToolBar())
-        })
+      map.addControl(new AMap.ToolBar())
+      map.addControl(new AMap.Scale())
+      geolocation = new AMap.Geolocation({
+           enableHighAccuracy: true,
+           timeout: 10000,
+           buttonOffset: new AMap.Pixel(10, 50),
+           zoomToAccuracy: true
+       })
+       map.addControl(geolocation)
+       geolocation.getCurrentPosition()
+       AMap.event.addListener(geolocation, 'complete', function() {
+         console.log('success')
+       })
+       AMap.event.addListener(geolocation, 'error', function() {
+         console.log('error')
+       })
     },
     keyUpSearch() {
-      this.search()
+      this._keyUpSearch()
     },
-    search() {
+    _keyUpSearch() {
       var txt = this.$refs.searchText.value
-      AMap.service(['AMap.Autocomplete', 'AMap.PlaceSearch'], function() {
-        var autoOptions = {
-          city: txt, // 城市，默认全国
-          input: 'input' // 使用联想输入的input的id
-        }
-        var autocomplete = new AMap.Autocomplete(autoOptions)
-        var placeSearch = new AMap.PlaceSearch({
-          city: txt,
-          map: map
-        })
-        AMap.event.addListener(autocomplete, 'select', function(e) {
-          placeSearch.search(e.poi.name, function(status, result) {
-          })
+      this.txt = txt
+      AMap.plugin(['AMap.Autocomplete', 'AMap.PlaceSearch'], function() {
+      var autoOptions = {
+        city: txt, // 城市，默认全国
+        input: 'input' // 使用联想输入的input的id
+      }
+      var autocomplete = new AMap.Autocomplete(autoOptions)
+      var placeSearch = new AMap.PlaceSearch({
+        city: txt,
+        panel: 'panel',
+        pageSize: 5,
+        map: map
+      })
+      AMap.event.addListener(autocomplete, 'select', function(e) {
+        placeSearch.setCity(e.poi.adcode)
+        placeSearch.search(e.poi.name, function(status, result) {
+          if (result.info === 'OK' && status === 'complete') {
+            console.log(result)
+          }
         })
       })
-      setTimeout(() => {
-        this.searchData = [1, 2, 3]
-      }, 1000)
+      console.log(txt)
+    })
     }
   },
   components: {
@@ -152,5 +170,8 @@ export default {
     font-size:$font-size-title;
     color:$color-background-bule;
   }
+}
+.auto-item{
+  padding:10px;
 }
 </style>

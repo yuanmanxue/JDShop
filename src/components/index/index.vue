@@ -12,7 +12,7 @@
     <scroll class="scroll-wrap" :data="shopData" ref="scroll" @scroll="scroll" :probe-type="probeType" :listen-scroll="listenScroll">
       <div>
         <!-- 轮播图 -->
-        <div class="slider-wrapper" v-if="slider.length">
+        <div class="slider-wrapper" v-if="slider.length>0">
           <Slider>
             <div v-for='item in slider'>
               <a href="#">
@@ -31,7 +31,7 @@
           </div>
         </div>
         <!-- footerBanner1 -->
-        <div class="footer-slider" v-if="footerSlider.length">
+        <div class="footer-slider" v-if="footerSlider.length>0">
           <div class="slider-wrapper">
             <Slider :autoPlay='false' :loop="false">
               <div v-for="item in footerSlider[0]">
@@ -43,7 +43,7 @@
           </div>
         </div>
         <!-- footerBanner2 -->
-        <div class="footer-slider" v-if="footerSlider.length">
+        <div class="footer-slider" v-if="footerSlider.length>0">
           <div class="slider-wrapper">
             <Slider :autoPlay='false'>
               <div v-for="item in footerSlider[1]">
@@ -55,9 +55,9 @@
           </div>
         </div>
         <!-- 秒杀区 -->
-        <Seckill :data='seckill'></Seckill>
+        <Seckill :data='seckill' v-if="seckill.length>0"></Seckill>
         <!-- footerBanner3 -->
-        <div class="footer-slider" v-if="footerSlider.length">
+        <div class="footer-slider" v-if="footerSlider.length>0">
           <div class="slider-wrapper">
             <Slider :autoPlay='false'>
               <div v-for="item in footerSlider[2]">
