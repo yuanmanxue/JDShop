@@ -1,3 +1,10 @@
+<!--
+@Author: yuanmanxue
+@Date:   2017-11-03 02:47:08
+@Last modified by:   yuanmanxue
+@Last modified time: 2018-01-04 10:41:20
+-->
+
 <template>
   <div>
     <div class="menu-scroll-wrap">
@@ -60,7 +67,7 @@ export default {
     }
     this.probeType = 3
     this.listenScroll = true
-  },
+    },
   computed: {
     ...mapGetters([
       'shop',
@@ -169,7 +176,6 @@ export default {
     getMoreData() {
       if (this.getMoreFlag) {
         this.page += 1
-        console.log(this.page)
         this._getShopDetail(this.shop.params.storeId, this.promotLabel, this.catId, this.page)
       }
     },

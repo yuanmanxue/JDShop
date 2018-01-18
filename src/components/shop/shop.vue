@@ -1,3 +1,10 @@
+<!--
+@Author: yuanmanxue
+@Date:   2017-10-25 02:49:52
+@Last modified by:   yuanmanxue
+@Last modified time: 2017-12-07 09:51:12
+-->
+
 <template>
 <div>
   <div class="shop-title-wrap" v-if='data.length'>——<span class="shop-title">{{footerTitle.floorName}}</span>——</div>
@@ -6,7 +13,7 @@
       <div class="shop-avator">
         <img v-lazy="item.floorCellData.imgUrl" v-if='item.floorCellData.imgUrl'>
         <img src="./newLoading.gif" alt="" v-else>
-        <i class="icon-count">{{totalCount}}</i>
+        <!-- <i class="icon-count" v-if="totalCountFn(item)>0">{{totalCountFn(item)}}</i> -->
       </div>
       <div class="info">
         <p class="name">{{item.floorCellData.name}}</p>
@@ -50,16 +57,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'addCatList'
-    ]),
-    totalCount() {
-      let count = 0
-      this.addCatList.forEach((item) => {
-        // item.skuId
-        count += item.count
-      })
-      return count
-    }
+      'shopList'
+    ])
   },
   methods: {
     onToggleShow(newData) {
@@ -70,6 +69,16 @@ export default {
     // }),
     selectShop(item) {
       this.$emit('select-shop', item)
+    },
+    totalCountFn(item) {
+      // let id = item.floorCellData.params.storeId
+      let count = 0
+      this.shopList.forEach((item) => {
+        // if (item.storeId === id) {
+        //   count += item.count
+        // }
+      })
+      return count
     }
   },
   components: {

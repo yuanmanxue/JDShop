@@ -1,16 +1,37 @@
+<!--
+@Author: yuanmanxue
+@Date:   2017-10-23 05:11:41
+@Last modified by:   yuanmanxue
+@Last modified time: 2018-01-18 04:06:55
+-->
+
 <template>
-  <div class="search-bar-wrap">
-    <div class="search-bar" ref="searchBar">
-      <div class="position" ref="position" @click="goToMap"><i class="iconfont">&#xe613;</i><span>学府一号学府一号学府一号学府一号</span><i class="iconfont">&#xe501;</i></div>
-      <div class="search-box" v-show="!this.fold"><i class="iconfont search-icon">&#xe612;</i><input type="text" name="" value=""></div>
-      <div class="message"><i class="iconfont">&#xe602;</i></div>
-      <div class="message messages-search" v-show="this.fold"><i class="iconfont">&#xe612;</i></div>
-      <div class="message messages-sort" v-show="this.fold" @click="toggleRankType"><i class="iconfont">&#xe689;</i></div>
-      <ul class="rank-type" v-show="this.rankShow && this.fold">
-        <li v-for="(items,index) in storeSortTexts" :class="rankType===index ? 'active' : ''" @click="selectRankType(index)">{{items.text}}</li>
-      </ul>
+<div class="search-bar-wrap">
+  <div class="search-bar" ref="searchBar">
+    <div class="position" ref="position" @click="goToMap">
+      <i class="iconfont">&#xe613;</i>
+      <span>学府一号学府一号学府一号学府一号</span>
+      <i class="iconfont">&#xe501;</i>
     </div>
+    <!-- 搜索框 -->
+    <div class="search-box" v-show="!this.fold">
+      <i class="iconfont search-icon">&#xe612;</i>
+      <input type="text" name="" value="" @focus="goSearch">
+    </div>
+    <div class="message"><i class="iconfont">&#xe602;</i></div>
+    <!-- 搜索icon -->
+    <div class="message messages-search" v-show="this.fold" @click="goSearch">
+      <i class="iconfont">&#xe612;</i>
+    </div>
+    <div class="message messages-sort" v-show="this.fold" @click="toggleRankType">
+      <i class="iconfont">&#xe689;</i>
+    </div>
+    <!-- 排序 -->
+    <ul class="rank-type" v-show="this.rankShow && this.fold">
+      <li v-for="(items,index) in storeSortTexts" :class="rankType===index ? 'active' : ''" @click="selectRankType(index)">{{items.text}}</li>
+    </ul>
   </div>
+</div>
 </template>
 <script type="text/ecmascript-6">
 export default {
@@ -34,11 +55,17 @@ export default {
       defalut: 0
     }
   },
-  created() {
-  },
+  created() {},
   methods: {
     goToMap() {
-      this.$router.push({path: './map'})
+      this.$router.push({
+        path: './map'
+      })
+    },
+    goSearch() {
+      this.$router.push({
+        path: './searchdetail'
+      })
     },
     // 当页面像上面滚动到一定距离的时候，改变搜索框的样式
     setSearchBarBg() {

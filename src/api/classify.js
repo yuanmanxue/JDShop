@@ -1,3 +1,10 @@
+/**
+ * @Author: yuanmanxue
+ * @Date:   2017-11-17 03:46:05
+ * @Last modified by:   yuanmanxue
+ * @Last modified time: 2017-12-07 08:52:59
+ */
+
 import {commonParams} from './config.js'
 import axios from 'axios'
 export function getClassifyList () {

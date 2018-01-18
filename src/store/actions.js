@@ -1,3 +1,10 @@
+/**
+ * @Author: yuanmanxue
+ * @Date:   2017-11-02 10:34:17
+ * @Last modified by:   yuanmanxue
+ * @Last modified time: 2018-01-15 10:50:51
+ */
+
 import * as types from './mutation-type'
 export const addCountFn = function ({commit, state}, food) {
   let list = state.shopList.slice()
@@ -68,8 +75,10 @@ export const connectShopList = function ({commit, state}, list) {
   shopList = result.map((i) => {
     return JSON.parse(i)
   })
+  console.log(shopList);
   commit(types.SET_SHOPLIST, shopList)
 }
+// 设置ShopList，但是存在bug，去重的时候犹豫count不一样
 export const setCurrentShopListFn = function({commit, state}, list) {
   let arr = []
   let shopList = state.shopList.slice()
@@ -84,10 +93,16 @@ export const setCurrentShopListFn = function({commit, state}, list) {
   shopList.forEach((item) => {
     list.forEach((listItem) => {
       if (item.skuId === listItem.skuId && item.catId === listItem.catId) {
+        // if (item.count !== listItem.count) {
+        //   console.log(listItem.count);
+        //   console.log(item.count);
+        //   listItem.count = item.count
+        // }
         arr.push(item)
       }
     })
   })
+  console.log(arr);
   let res2 = arr.map((i) => {
     return JSON.stringify(i)
   })

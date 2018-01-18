@@ -1,9 +1,15 @@
+<!--
+@Author: yuanmanxue
+@Date:   2017-11-03 02:16:31
+@Last modified by:   yuanmanxue
+@Last modified time: 2017-12-07 02:21:06
+-->
+
 <template>
   <div class="search-box-wrap">
-    <input type="text" ref="searchText" id="input" placeholder="搜索附近的商品和门店" @focus="goToSearch" :value="msg"/>
+    <input type="text" ref="searchText" id="input" placeholder="搜索附近的商品和门店" @focus="goToSearch" @blur="changeValue"/>
     <i class="iconfont search-icon">&#xe612;</i>
-    <div class="">{{msg}}</div>
-    <!-- <span>搜索</span> -->
+    <div>{{val}}</div>
   </div>
 </template>
 
@@ -11,13 +17,21 @@
 
 export default {
   data() {
-    return {
-      msg: 'default'
+    return {}
+  },
+  props: {
+    val: {
+      type: String,
+      defalut: '默认值'
     }
   },
   methods: {
     goToSearch() {
       this.$router.push('./searchdetail')
+    },
+    changeValue() {
+      let newVal = this.$refs.searchText.value;
+      this.$emit('updata:val', newVal)
     }
   },
   components: {

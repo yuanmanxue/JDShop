@@ -1,10 +1,17 @@
+<!--
+@Author: yuanmanxue
+@Date:   2017-11-30 03:37:15
+@Last modified by:   yuanmanxue
+@Last modified time: 2018-01-18 02:27:49
+-->
+
 <template>
   <div class="search-detail-wrap">
     <!-- 搜索框 -->
     <div class="search-wrap">
       <div class="go-back" @click="goBack"><i class="iconfont">&#xe50d;</i></div>
       <div class="search-detail">
-        <SearchBox></SearchBox>
+        <SearchBox @updata:val="newVal => ss = newVal"></SearchBox>
       </div>
     </div>
     <ul class="hot-words-wrap">

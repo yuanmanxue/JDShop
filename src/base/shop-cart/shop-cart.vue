@@ -1,3 +1,10 @@
+<!--
+@Author: yuanmanxue
+@Date:   2017-11-14 03:35:49
+@Last modified by:   yuanmanxue
+@Last modified time: 2018-01-18 05:27:49
+-->
+
 <template>
     <div class="">
       <div class="mask" v-show="addCatList.length > 0 && showList" @click="showListFn"></div>
@@ -10,29 +17,43 @@
           </div>
           <div class="right" :class="{'active': totalCount > 0}">去结算</div>
         </div>
-        <!-- <div class="total-count-txt" v-show="addCatList.length">全部商品</div> -->
         <!-- 购物车中商品的内容 -->
           <Scroll :data="addCatList" class="add-cart-list" v-show="showList" :probe-type="probeType" :listen-scroll="listenScroll" ref="addCartListScroll">
-            <div class="shop-list">
+            <div class="shop-list" v-show="addCatList.length>0">
+              <div class="all-select">
+                <input
+                  type="checkbox"
+                  name=""
+                  value=""
+                  checked="true"
+                  class="check-box iconfont icon-Pigeon"
+                  id="allSelect"
+                  @click="allSelectFn"
+                  ref="allSelect"
+               >
+                <label for="allSelect">全选</label>
+                <span>清空购物车</span>
+              </div>
               <ul>
-                <li v-for="(item, index) in addCatList" ref="shopListItem">
-                  <img v-lazy="item.imgUrl" v-if="item.imgUrl" class="left">
-                  <div class="right">
-                    <p class="name">{{item.skuName}}</p>
-                    <p class="month-sales"><span>月售{{item.monthSales}}件</span><span v-if="item.highOpinion"> | {{item.highOpinion}}</span></p>
-                    <div class="icon-text-wrap" v-if="item.tags.length > 0">
-                      <iconText :tagsText="item.tags[0].iconText" :tagsType="item.tags[0].type"></iconText>
+                  <li v-for="(item, index) in addCatList" ref="shopListItem">
+                    <input type="checkbox" name="" value="" checked="true" class="check-box iconfont icon-Pigeon">
+                    <img v-lazy="item.imgUrl" v-if="item.imgUrl" class="left">
+                    <div class="right">
+                      <p class="name">{{item.skuName}}</p>
+                      <p class="month-sales"><span>月售{{item.monthSales}}件</span><span v-if="item.highOpinion"> | {{item.highOpinion}}</span></p>
+                      <div class="icon-text-wrap" v-if="item.tags.length > 0">
+                        <iconText :tagsText="item.tags[0].iconText" :tagsType="item.tags[0].type"></iconText>
+                      </div>
+                      <div class="ball-wrap">
+                        <cartBall
+                         :food="item"
+                         @addCount="addCount(item)"
+                         @decrCount="decrCount(item)"
+                         ></cartBall>
+                      </div>
+                      <p><span class="real-price">￥{{item.realTimePrice}}</span><span v-if="item.basicPrice" class="old-price">￥{{item.basicPrice}}</span></p>
                     </div>
-                    <div class="ball-wrap">
-                      <cartBall
-                       :food="item"
-                       @addCount="addCount(item)"
-                       @decrCount="decrCount(item)"
-                       ></cartBall>
-                    </div>
-                    <p><span class="real-price">￥{{item.realTimePrice}}</span><span v-if="item.basicPrice" class="old-price">￥{{item.basicPrice}}</span></p>
-                  </div>
-                </li>
+                  </li>
               </ul>
             </div>
           </Scroll>
@@ -48,7 +69,9 @@ import {mapGetters, mapActions} from 'vuex'
 export default {
   data() {
     return {
-      showList: false
+      showList: false,
+      foo: false,
+      checkList: []
     }
   },
   props: {
@@ -60,6 +83,9 @@ export default {
   created() {
     this.probeType = 3
     this.listenScroll = true
+    this.addCatList.forEach((item) => {
+      this.checkList.push(item.skuId)
+    })
   },
   mounted() {
   },
@@ -101,6 +127,13 @@ export default {
       this.$nextTick(() => {
         this.$refs.addCartListScroll.refresh()
       })
+    },
+    changeBox() {
+      this.showCheckBox = !this.showCheckBox
+    },
+    allSelectFn(){
+      // console.log('点击了');
+      // console.log(this.$refs.shopListItem);
     },
     ...mapActions([
       'addCountFn',
@@ -145,11 +178,82 @@ export default {
   }
   .shop-list{
     border-top:1px solid #eee;
+    .all-select{
+      padding:0 .26666667rem;
+      height: 1.06666667rem;
+      border-bottom: 1px solid #ddd;
+      font-size: $font-size-title;
+      color:$color-text-theme;
+      .check-box{
+        &:after{
+          margin-top: -.36666667rem;
+        }
+        &:before{
+          margin-top: -.36666667rem;
+        }
+      }
+      label{
+        display: inline-block;
+        height: 1.06666667rem;
+        line-height: 1.06666667rem;
+      }
+      span{
+        display: inline-block;
+        float: right;
+        height: 1.06666667rem;
+        line-height: 1.06666667rem;
+        font-size: $font-size-small;
+        text-indent:.53333333rem;
+        background:url("//static-o2o.360buyimg.com/daojia/new/images/minicart/delete.png") no-repeat left center;
+        background-size: .4rem auto;
+      }
+    }
     li{
       display: flex;
       padding:.26666667rem .26666667rem;
       border-bottom:1px solid #eee;
       background-color:#fbfbfb;
+    }
+    & .check-box{
+      display: inline-block;
+      width: .8rem;
+      height: 0;
+      position: relative;
+      &:after{
+        box-sizing: border-box;
+        position: absolute;
+        top:0;
+        content:'';
+        display: inline-block;
+        width: .5rem;
+        height: .5rem;
+        margin-right:.26666667rem;
+        margin-top:.53333333rem;
+        background-color: #ffffff;
+        border:1px solid #ddd;
+        border-radius:50%;
+        text-align: center;
+        color:#fff;
+      }
+      &:before{
+        position: absolute;
+        top:0;
+        display: inline-block;
+        width: .5rem;
+        height: .5rem;
+        margin-right:.26666667rem;
+        margin-top:.53333333rem;
+        text-align: center;
+        color:#fff;
+        z-index:999;
+      }
+      &[type=checkbox]:checked:after{
+        background-color: $color-background-green;
+        border-color: $color-background-green;
+      }
+      &[type=checkbox]:checked:before{
+        color:#fff;
+      }
     }
     & .left{
       width:1.33333333rem;
@@ -159,7 +263,7 @@ export default {
       border: 1px solid #eee;
     }
     .right{
-      flex:auto;
+      width: 6.66666667rem;
       font-size:$font-size-small-s;
       padding-top:.13333333rem;
       position: relative;

@@ -1,3 +1,10 @@
+/**
+ * @Author: yuanmanxue
+ * @Date:   2017-10-23 04:05:53
+ * @Last modified by:   yuanmanxue
+ * @Last modified time: 2017-12-07 01:51:19
+ */
+
 @font-face {
   font-family: 'iconfont';
   src: url('../fonts/iconfont.eot');
@@ -17,6 +24,8 @@
 
 .icon-position:before { content: "\e613"; }
 
+.icon-Pigeon:before { content: "\e618"; }
+
 .icon-dangan:before { content: "\e633"; }
 
 .icon-tongzhi:before { content: "\e602"; }
@@ -29,6 +38,8 @@
 
 .icon-guanbi:before { content: "\e839"; }
 
+.icon-jiantou-left:before { content: "\e50d"; }
+
 .icon-paixu:before { content: "\e689"; }
 
 .icon-arrow:before { content: "\e501"; }
@@ -38,5 +49,3 @@
 .icon-arrow-up:before { content: "\e502"; }
 
 .icon-qicheqianlian-:before { content: "\e503"; }
-
-.icon-jiantou-left:before { content: "\e50d"; }

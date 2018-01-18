@@ -1,3 +1,10 @@
+<!--
+@Author: yuanmanxue
+@Date:   2017-10-23 02:51:44
+@Last modified by:   yuanmanxue
+@Last modified time: 2018-01-18 04:00:31
+-->
+
 <template>
 <div class="index-wrap">
   <!-- 搜索框 -->
@@ -22,7 +29,7 @@
           </Slider>
         </div>
         <!-- 球形图案的分类 -->
-        <div class="ball-wrap">
+        <div class="ball-wrap" v-if="ball.length>0">
           <div class="ball" v-for="item in ball">
             <a href="#">
               <img :src="item.floorCellData.imgUrl" alt="">
@@ -55,7 +62,7 @@
           </div>
         </div>
         <!-- 秒杀区 -->
-        <Seckill :data='seckill' v-if="seckill.length>0"></Seckill>
+        <Seckill :data='seckill'></Seckill>
         <!-- footerBanner3 -->
         <div class="footer-slider" v-if="footerSlider.length>0">
           <div class="slider-wrapper">
@@ -98,8 +105,9 @@ import {createShop} from 'common/js/shop'
 
 const SCROLLTOP = -115
 const SEARCHBARHEIGHT = 56
+const GETMOREDATA = 300
 export default {
-  data() {
+  data(){
     return {
       slider: [],
       ball: [],
@@ -128,12 +136,13 @@ export default {
       getSlider().then((res) => {
         if (res.code === ERR_OK) {
           this.storeSortTexts = res.result.config.storeSortTexts
+          console.log(res.result);
           for (let i = 0; i < res.result.data.length; i++) {
             if (res.result.data[i].floorStyle === 'banner') {
               this.slider = res.result.data[i].data
             } else if (res.result.data[i].floorStyle === 'ball') {
               this.ball = res.result.data[i].data
-            } else if (res.result.data[i].floorStyle === 'act5') {
+            } else if (res.result.data[i].floorStyle === 'seckill') {
               this.seckill = res.result.data[i].data
             } else {
               this.footerSlider.push(res.result.data[i].data)
@@ -187,8 +196,8 @@ export default {
       }
       // 滚动到底部多少距离的时候，动态加载数据
       this.scrollBottom = pos.y
-      let flag = -this.$refs.shopList.clientHeight
-      if (this.scrollBottom < flag) {
+      let num = -this.$refs.shopList.clientHeight
+      if (this.scrollBottom < num + GETMOREDATA) {
         this.flag = true
       } else {
         this.flag = false
@@ -271,9 +280,13 @@ export default {
       width: 80%;
     }
     span{
+      width: 100%;
       display:block;
       font-size:$font-size-small-s;
       padding-top: 8px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
   }
 }
