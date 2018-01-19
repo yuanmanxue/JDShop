@@ -2,7 +2,7 @@
 @Author: yuanmanxue
 @Date:   2017-11-14 03:35:49
 @Last modified by:   yuanmanxue
-@Last modified time: 2018-01-18 05:27:49
+@Last modified time: 2018-01-19 05:24:41
 -->
 
 <template>
@@ -25,18 +25,22 @@
                   type="checkbox"
                   name=""
                   value=""
-                  checked="true"
                   class="check-box iconfont icon-Pigeon"
                   id="allSelect"
-                  @click="allSelectFn"
-                  ref="allSelect"
+                  v-model="checkAll"
+                  @click="changeState"
                >
                 <label for="allSelect">全选</label>
-                <span>清空购物车</span>
+                <span @click="delectShopFn">清空购物车</span>
               </div>
               <ul>
                   <li v-for="(item, index) in addCatList" ref="shopListItem">
-                    <input type="checkbox" name="" value="" checked="true" class="check-box iconfont icon-Pigeon">
+                    <input
+                    type="checkbox"
+                    name="" :value="item.skuId"
+                    v-model="checkModel"
+                    class="check-box iconfont icon-Pigeon"
+                    >
                     <img v-lazy="item.imgUrl" v-if="item.imgUrl" class="left">
                     <div class="right">
                       <p class="name">{{item.skuName}}</p>
@@ -57,6 +61,8 @@
               </ul>
             </div>
           </Scroll>
+          <confirm @confirm="confirmFn()" @cancel="cancelFn()" ref="confirm" text="全部清除商品吗？"></confirm>
+          <div class="mask" v-show="showList2"></div>
       </div>
     </div>
 </template>
@@ -65,13 +71,16 @@
 import Scroll from 'base/scroll/scroll'
 import iconText from 'base/iconText/iconText'
 import cartBall from 'base/cart-ball/cart-ball'
+import Confirm from 'base/confirm.vue'
 import {mapGetters, mapActions} from 'vuex'
 export default {
   data() {
     return {
       showList: false,
+      showList2:false,
       foo: false,
-      checkList: []
+      checkModel: [],
+      checkAll: false
     }
   },
   props: {
@@ -83,9 +92,7 @@ export default {
   created() {
     this.probeType = 3
     this.listenScroll = true
-    this.addCatList.forEach((item) => {
-      this.checkList.push(item.skuId)
-    })
+    this.changeState()
   },
   mounted() {
   },
@@ -127,31 +134,61 @@ export default {
       this.$nextTick(() => {
         this.$refs.addCartListScroll.refresh()
       })
+      this.$refs.confirm.hide()
     },
     changeBox() {
       this.showCheckBox = !this.showCheckBox
     },
-    allSelectFn(){
-      // console.log('点击了');
-      // console.log(this.$refs.shopListItem);
+    delectShopFn(){
+      console.log('清空购物车列表')
+      this.$refs.confirm.show()
+      this.showList2 = true
+    },
+    confirmFn(){
+      this.delectCartListFn()
+      this.showListFn()
+      this.cancelFn()
+    },
+    cancelFn(){
+      this.showList2 = false
+    },
+    changeState(){
+      this.checkModel = []
+      this.checkAll = !this.checkAll
+      if (this.checkAll === true) {
+        this.addCatList.forEach((item, index) => {
+          this.checkModel.push(item.skuId)
+        })
+      } else {
+        this.checkModel = []
+      }
     },
     ...mapActions([
       'addCountFn',
       'decrCountFn',
-      'addCartListFn'
+      'addCartListFn',
+      'delectCartListFn'
     ])
   },
   components: {
     Scroll,
     iconText,
-    cartBall
+    cartBall,
+    Confirm
   },
   watch: {
     addCatList() {
       this.$nextTick(() => {
         this.$refs.addCartListScroll.refresh()
       })
-    }
+    },
+    checkModel() {
+        if (this.checkModel.length === this.addCatList.length) {
+          this.checkAll = true
+        } else {
+          this.checkAll = false
+        }
+      }
   }
 }
 </script>

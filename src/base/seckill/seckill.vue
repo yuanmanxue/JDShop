@@ -2,7 +2,7 @@
 @Author: yuanmanxue
 @Date:   2017-10-24 05:06:00
 @Last modified by:   yuanmanxue
-@Last modified time: 2018-01-18 02:29:11
+@Last modified time: 2018-01-19 09:15:56
 -->
 
 <template>
@@ -93,7 +93,8 @@ export default {
     }
   }
   .swiper-container{
-    box-sizing:border-content;
+    box-sizing:border-box;
+    width: 100%;
     padding:0 10px;
   }
   .seckill{

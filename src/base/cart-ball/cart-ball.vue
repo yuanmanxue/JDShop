@@ -1,3 +1,10 @@
+<!--
+@Author: yuanmanxue
+@Date:   2017-11-13 04:39:28
+@Last modified by:   yuanmanxue
+@Last modified time: 2018-01-19 04:35:53
+-->
+
 <template>
 <div class="cartcontrol">
   <div class="cart-add" @click="addCount"></div>

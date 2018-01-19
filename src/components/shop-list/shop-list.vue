@@ -1,3 +1,10 @@
+<!--
+@Author: yuanmanxue
+@Date:   2017-11-03 05:11:42
+@Last modified by:   yuanmanxue
+@Last modified time: 2018-01-19 04:33:22
+-->
+
 <template>
 <div>
   <!-- 正在加载 -->
@@ -13,8 +20,10 @@
           <div class="right">
             <p class="name">{{item.skuName}}</p>
             <p class="month-sales"><span>月售{{item.monthSales}}件</span><span v-if="item.highOpinion"> | {{item.highOpinion}}</span></p>
-            <div class="icon-text-wrap" v-if="item.tags.length > 0">
-              <iconText :tagsText="item.tags[0].iconText" :tagsType="item.tags[0].type"></iconText>
+            <div class="icon-text-wrap">
+              <div v-if="item.tags.length > 0">
+                <iconText :tagsText="item.tags[0].iconText" :tagsType="item.tags[0].type"></iconText>
+              </div>
             </div>
             <div class="ball-wrap">
               <cartBall
@@ -148,12 +157,13 @@ export default {
       border-bottom:1px solid #eee;
     }
     .left{
-      width:1.73333333rem;
-      height:1.73333333rem;
-      padding:0 .26666667rem;
+      width:1.43333333rem;
+      height:1.43333333rem;
+      margin-right: .26666667rem;
+      margin-top: .26666667rem;
     }
     .right{
-      flex:auto;
+      width: 5.6rem;
       font-size:$font-size-small;
       padding-top:.13333333rem;
       position: relative;
@@ -161,7 +171,7 @@ export default {
         padding:.10333333rem 0;
       }
       .name{
-        font-size:$font-size-title;
+        font-size:$font-size-small;
         line-height: .6rem;
       }
       .month-sales{

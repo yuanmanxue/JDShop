@@ -1,10 +1,17 @@
+<!--
+@Author: yuanmanxue
+@Date:   2017-10-23 03:13:45
+@Last modified by:   yuanmanxue
+@Last modified time: 2018-01-19 09:56:51
+-->
+
 <template>
-<div class="footer-nav">
-  <router-link to="/index" class="footer-item"><i class="iconfont">&#xe650;</i>首页</router-link>
-  <router-link to="/classify" class="footer-item"><i class="iconfont">&#xe634;</i>分类</router-link>
-  <router-link to="/shoppingcart" class="footer-item"><i class="iconfont">&#xe503;</i>购物车</router-link>
-  <router-link to="/indent" class="footer-item"><i class="iconfont">&#xe633;</i>订单</router-link>
-  <router-link to="/mine" class="footer-item"><i class="iconfont">&#xe79c;</i>我的</router-link>
+<div class="footerNav">
+  <router-link to="/index"><i class="iconfont">&#xe650;</i>首页</router-link>
+  <router-link to="/classify"><i class="iconfont">&#xe634;</i>分类</router-link>
+  <router-link to="/shoppingcart"><i class="iconfont">&#xe503;</i>购物车</router-link>
+  <router-link to="/indent"><i class="iconfont">&#xe633;</i>订单</router-link>
+  <router-link to="/mine"><i class="iconfont">&#xe79c;</i>我的</router-link>
 </div>
 </template>
 
@@ -13,9 +20,9 @@ export default {
 
 }
 </script>
-<style scoped lang="stylus" rel="stylesheet/stylus">
+<style lang="stylus" scoped>
   @import "~common/stylus/variable.styl"
-  .footer-nav{
+  .footerNav{
       position: fixed;
       bottom:0;
       width: 100%;
@@ -23,7 +30,7 @@ export default {
       display: flex;
       border-top: 1px solid #d9d9d9;
       background-color: #ffffff;
-      .footer-item{
+      a{
         position: relative;
         height: 20px;
         line-height: 20px;
@@ -41,9 +48,8 @@ export default {
           font-size:$font-size-icon;
         }
       }
-      .active{
-        color:$color-text-green;
+     .router-link-exact-active.active{
+        color:green;
       }
   }
-
 </style>

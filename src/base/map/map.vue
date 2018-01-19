@@ -1,3 +1,10 @@
+<!--
+@Author: yuanmanxue
+@Date:   2017-10-30 04:53:11
+@Last modified by:   yuanmanxue
+@Last modified time: 2018-01-19 05:16:57
+-->
+
 <template>
 <transition name="slide">
   <div class="map-wrap">
@@ -19,7 +26,7 @@ import Scroll from 'base/scroll/scroll'
 // import AMap from 'AMap'
 var map, geolocation
 var num = []
-var result = []
+var result = {}
 export default {
   mounted: function() {
     let _this = this
@@ -38,7 +45,8 @@ export default {
       searchData: [],
       page: 10,
       show: false,
-      txt: ''
+      txt: '',
+      address:result
     }
   },
   created() {},
@@ -72,30 +80,36 @@ export default {
       this._keyUpSearch()
     },
     _keyUpSearch() {
-      var txt = this.$refs.searchText.value
-      this.txt = txt
-      AMap.plugin(['AMap.Autocomplete', 'AMap.PlaceSearch'], function() {
-      var autoOptions = {
-        city: txt, // 城市，默认全国
-        input: 'input' // 使用联想输入的input的id
-      }
-      var autocomplete = new AMap.Autocomplete(autoOptions)
-      var placeSearch = new AMap.PlaceSearch({
-        city: txt,
-        panel: 'panel',
-        pageSize: 5,
-        map: map
-      })
-      AMap.event.addListener(autocomplete, 'select', function(e) {
-        placeSearch.setCity(e.poi.adcode)
-        placeSearch.search(e.poi.name, function(status, result) {
-          if (result.info === 'OK' && status === 'complete') {
-            console.log(result)
-          }
+        var txt = this.$refs.searchText.value
+        this.txt = txt
+        AMap.plugin(['AMap.Autocomplete', 'AMap.PlaceSearch'], function() {
+        var autoOptions = {
+          city: txt, // 城市，默认全国
+          input: 'input' // 使用联想输入的input的id
+        }
+        var autocomplete = new AMap.Autocomplete(autoOptions)
+        var placeSearch = new AMap.PlaceSearch({
+          city: txt,
+          panel: 'panel',
+          pageSize: 5,
+          map: map
         })
+        AMap.event.addListener(autocomplete, 'select', function(e) {
+          placeSearch.setCity(e.poi.adcode)
+          placeSearch.search(e.poi.name, function(status, result) {
+            if (result.info === 'OK' && status === 'complete') {
+              console.log(result)
+            }
+          })
+        })
+        AMap.event.addListener(placeSearch, 'selectChanged', function(results) {
+             // 获取当前选中的结果数据
+            result = results.selected.data
+         });
       })
-      console.log(txt)
-    })
+    },
+    doSomething() {
+      this.$router.go(-1)
     }
   },
   components: {
@@ -104,6 +118,10 @@ export default {
   watch: {
     searchData(newData) {
       this.searchData = newData
+    },
+    address(newData) {
+      this.address = newData
+      console.log(`ddddd ${this.address}`);
     }
   }
 }
