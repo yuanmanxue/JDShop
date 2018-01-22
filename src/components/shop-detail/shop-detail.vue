@@ -1,3 +1,10 @@
+<!--
+@Author: yuanmanxue
+@Date:   2017-11-02 11:14:58
+@Last modified by:   yuanmanxue
+@Last modified time: 2018-01-22 01:20:03
+-->
+
 <template>
 <transition name="slide">
   <div class="shop-detail-wrap">
@@ -38,13 +45,15 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'shop'
+      'shop',
+      'address'
     ])
   },
   methods: {
-    _storeDetail(id) {
-      storeDetail(id).then((res) => {
+    _storeDetail(id, address) {
+      storeDetail(id, address).then((res) => {
         if (res.code === ERR_OK) {
+          console.log(res);
           this.shopInfo = res.result
           this.cateList = res.result.cateList
           this.banner = res.result.storeActPageList
@@ -57,7 +66,7 @@ export default {
       this.$router.push({path: '/index'})
       return false
     }
-    this._storeDetail(this.shop.params.storeId)
+    this._storeDetail(this.shop.params.storeId, this.address)
   },
   components: {
     Scroll,

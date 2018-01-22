@@ -2,7 +2,7 @@
  * @Author: yuanmanxue
  * @Date:   2017-11-02 10:34:17
  * @Last modified by:   yuanmanxue
- * @Last modified time: 2018-01-19 02:34:40
+ * @Last modified time: 2018-01-22 04:38:58
  */
 
 import * as types from './mutation-type'
@@ -84,7 +84,6 @@ export const connectShopList = function ({commit, state}, list) {
   shopList = result.map((i) => {
     return JSON.parse(i)
   })
-  console.log(addList);
   shopList.forEach((item) => {
     addList.forEach((_item) => {
       if (item.skuId === _item.skuId) {
@@ -132,7 +131,6 @@ export const setCurrentShopListFn = function({commit, state}, list) {
 // 购物车中的商品
 export const addCartListFn = function({commit, state}, storeId) {
   let list = state.shopList.slice()
-  console.log(storeId)
   let ret = []
   list.forEach((item) => {
     if (item.count > 0) {
@@ -148,7 +146,6 @@ export const delectCartListFn = function({commit, state, shop}) {
   let list = state.addCatList.slice()
   let shopList = deepClone(state.shopList)
   let currentList = deepClone(state.currentShopList)
-  console.log(currentList);
   let _shop = Object.assign({}, state.shop)
   shopList.forEach((item) => {
     if (item.count > 0) {
@@ -175,6 +172,10 @@ export const delectCartListFn = function({commit, state, shop}) {
   })
   commit(types.SET_ADDCAT_LIST, list)
 }
+// 设置定位信息
+// export const setAddress = function({commit, state}, address) {
+//   commit(types.SET_ADDRESS, address)
+// }
 // json数组对象去重
 function unique(arr) {
     var ret = []

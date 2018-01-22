@@ -18,7 +18,6 @@
     "babel-runtime": "^6.0.0",
     "better-scroll": "^0.4.0",
     "create-keyframe-animation": "^0.1.0",
-    "element-ui": "^2.0.7",
     "extract-text-webpack-plugin": "^3.0.2",
     "fastclick": "^1.0.6",
     "jsonp": "^0.2.1",

@@ -1,3 +1,10 @@
+<!--
+@Author: yuanmanxue
+@Date:   2017-10-23 02:57:57
+@Last modified by:   yuanmanxue
+@Last modified time: 2018-01-22 10:39:15
+-->
+
 <template>
   <div class="">
     <div class="search-box-wrap">
@@ -33,6 +40,7 @@ import Scroll from 'base/scroll/scroll'
 import menuScroll from 'base/menu-scroll/menu-scroll'
 import {getClassifyList} from 'api/classify.js'
 import {createClassifyTag} from 'common/js/classify.js'
+import {mapGetters} from 'vuex'
 import {ERR_OK} from 'api/config.js'
 export default {
   data() {
@@ -47,21 +55,25 @@ export default {
   created() {
     this.probeType = 3
     this.listenScroll = true
-    this._getClassifyList()
+    this._getClassifyList(this.address)
     // this.$nextTick(() => {
     //   this.$refs.scrollClassifyList.refresh()
     // })
   },
   computed: {
+    ...mapGetters([
+      'address'
+    ]),
     list() {
       // this.$refs.scrollClassifyList.refresh()
       return this.classifyList[this.iNum]
     }
   },
   methods: {
-    _getClassifyList() {
-      getClassifyList().then((res) => {
+    _getClassifyList(address) {
+      getClassifyList(address).then((res) => {
         if (res.code === ERR_OK) {
+          console.log(res);
           this.classifyList = this._normalizeClassifyTag(res.result.firstTabCate)
         }
       })

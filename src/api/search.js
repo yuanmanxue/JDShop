@@ -1,16 +1,23 @@
+/**
+ * @Author: yuanmanxue
+ * @Date:   2017-11-30 04:32:51
+ * @Last modified by:   yuanmanxue
+ * @Last modified time: 2018-01-22 11:08:41
+ */
+
 import {commonParams} from './config.js'
 import axios from 'axios'
 import qs from 'qs'
-export function getHotTag () {
+export function getHotTag (address) {
   const url = '/api/getSlider'
   const data = Object.assign({}, commonParams, {
     _djrandom: 15120307333393,
     body: {
       'size': 12,
       'type': 2,
-      'cityId': '1158',
-      'longitude': 121.5463,
-      'latitude': 29.80923,
+      'cityId': address.citycode,
+      'longitude': address.location.lng,
+      'latitude': address.location.lat,
       'storeIds': [],
       'channelId': ''
     },
@@ -23,7 +30,7 @@ export function getHotTag () {
     return Promise.resolve(res.data)
   })
 }
-export function getHotTagShopList () {
+export function getHotTagShopList (address) {
   let n = new Date().getTime()
   n = n + '' + Math.round(Math.random() * 10)
   console.log(n)
@@ -32,8 +39,8 @@ export function getHotTagShopList () {
     _djrandom: 151244118655022,
     body: {
       'ref': 'homeCategorySearch/LID:13',
-      'longitude': 121.5463,
-      'latitude': 29.80923,
+      'longitude': address.location.lng,
+      'latitude': address.location.lat,
       'type': 2,
       'key': '牛奶',
       'industryTags': [],
@@ -54,10 +61,10 @@ export function getHotTagShopList () {
       'areaId': 1158
     },
     format: 'json',
-    lng: 121.560905,
-    lat: 29.80933,
-    city_id: 1158,
-    poi: '学府一号C',
+    lng: address.location.lng,
+    lat: address.location.lat,
+    city_id: address.citycode,
+    poi: address.address,
     functionId: 'homeSearch/searchByStorePostV_230',
     jda: '122270672.15026908052541027638351.1502690805.1510189899.1512112974.11'
   })

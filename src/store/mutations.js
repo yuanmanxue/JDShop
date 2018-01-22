@@ -1,3 +1,10 @@
+/**
+ * @Author: yuanmanxue
+ * @Date:   2017-11-02 10:34:47
+ * @Last modified by:   yuanmanxue
+ * @Last modified time: 2018-01-22 09:07:41
+ */
+
 import * as types from './mutation-type'
 
 const mutations = {
@@ -18,6 +25,9 @@ const mutations = {
   },
   [types.SET_ADDCAT_LIST](state, addCatList) {
     state.addCatList = addCatList
+  },
+  [types.SET_ADDRESS](state, address) {
+    state.address = address
   }
 }
 export default mutations

@@ -2,7 +2,7 @@
 @Author: yuanmanxue
 @Date:   2017-10-30 04:53:11
 @Last modified by:   yuanmanxue
-@Last modified time: 2018-01-19 05:16:57
+@Last modified time: 2018-01-22 04:34:40
 -->
 
 <template>
@@ -10,7 +10,11 @@
   <div class="map-wrap">
     <div id="map">
       <div class="map-search">
-        <input type="text" ref="searchText" id="input" placeholder="请输入地址" @keyup="keyUpSearch"/><span @click="keyUpSearch">搜索</span>
+        <input type="text" ref="searchText" id="input" placeholder="请输入地址" @keyup="keyUpSearch" /><span @click="keyUpSearch">搜索</span>
+        <!-- <el-amap-search-box class="search-box" :on-search-result="onSearchResult"></el-amap-search-box>
+        <el-amap vid="amapDemo" :center="center" class="amap-demo">
+          <el-amap-marker v-for="marker in markers" :position="marker" ></el-amap-marker>
+        </el-amap> -->
       </div>
       <div id="container" style="width:100%; height:88%"></div>
       <Scroll ref="scroll" class="map-scroll" :data="searchData">
@@ -24,18 +28,22 @@
 <script>
 import Scroll from 'base/scroll/scroll'
 // import AMap from 'AMap'
+import {lazyAMapApiLoaderInstance} from 'vue-amap'
+import {mapMutations} from 'vuex'
 var map, geolocation
 var num = []
-var result = {}
 export default {
-  mounted: function() {
-    let _this = this
-    let promise = new Promise(function(resolve, reject) {
-      _this.init()
-      resolve()
-    })
-    promise.then(function() {
-      console.log(result)
+  mounted() {
+    // null
+    // console.log(lazyAMapApiLoaderInstance);
+    // if (!map) {
+    //   this.$router.go(-1)
+    // }
+    lazyAMapApiLoaderInstance.load().then(() => {
+      // console.log(this);
+      let self = this
+      // console.log(self);
+      self.init()
     })
   },
   data() {
@@ -46,43 +54,48 @@ export default {
       page: 10,
       show: false,
       txt: '',
-      address:result
+      address: {}
     }
   },
   created() {},
   methods: {
     init: function() {
+      let self = this
       map = new AMap.Map('container', {
         mapStyle: 'amap://styles/macaron',
         center: [121.5463, 29.80923],
         resizeEnable: true,
         zoom: 12
       })
-      this.center = map.center
+      self.center = map.center
       map.addControl(new AMap.ToolBar())
       map.addControl(new AMap.Scale())
       geolocation = new AMap.Geolocation({
-           enableHighAccuracy: true,
-           timeout: 10000,
-           buttonOffset: new AMap.Pixel(10, 50),
-           zoomToAccuracy: true
-       })
-       map.addControl(geolocation)
-       geolocation.getCurrentPosition()
-       AMap.event.addListener(geolocation, 'complete', function() {
-         console.log('success')
-       })
-       AMap.event.addListener(geolocation, 'error', function() {
-         console.log('error')
-       })
+        enableHighAccuracy: true,
+        timeout: 10000,
+        buttonOffset: new AMap.Pixel(10, 50),
+        zoomToAccuracy: true
+      })
+      map.addControl(geolocation)
+      geolocation.getCurrentPosition()
+      AMap.event.addListener(geolocation, 'complete', function() {
+        console.log('success')
+      })
+      AMap.event.addListener(geolocation, 'error', function() {
+        console.log('error')
+      })
     },
+    ...mapMutations({
+      setAddress: 'SET_ADDRESS'
+    }),
     keyUpSearch() {
       this._keyUpSearch()
     },
     _keyUpSearch() {
-        var txt = this.$refs.searchText.value
-        this.txt = txt
-        AMap.plugin(['AMap.Autocomplete', 'AMap.PlaceSearch'], function() {
+      let self = this
+      var txt = this.$refs.searchText.value
+      self.txt = txt
+      AMap.plugin(['AMap.Autocomplete', 'AMap.PlaceSearch'], function() {
         var autoOptions = {
           city: txt, // 城市，默认全国
           input: 'input' // 使用联想输入的input的id
@@ -94,8 +107,10 @@ export default {
           pageSize: 5,
           map: map
         })
+        console.log(self.txt);
         AMap.event.addListener(autocomplete, 'select', function(e) {
           placeSearch.setCity(e.poi.adcode)
+          // 搜索地区
           placeSearch.search(e.poi.name, function(status, result) {
             if (result.info === 'OK' && status === 'complete') {
               console.log(result)
@@ -103,14 +118,43 @@ export default {
           })
         })
         AMap.event.addListener(placeSearch, 'selectChanged', function(results) {
-             // 获取当前选中的结果数据
-            result = results.selected.data
-         });
+          // 获取当前选中的结果数据
+          self.address = results.selected.data
+          self.goBack()
+        });
       })
     },
-    doSomething() {
+    goBack() {
+      // 在vuex里面设置定位信息
+      this.setAddress(this.address)
       this.$router.go(-1)
+    },
+    throttle(fn, delay, text) {
+      clearTimeout(fn.timeoutId);
+      fn.timeoutId = setTimeout(function() {
+        fn.call(text);
+      }, delay);
     }
+    // onSearchResult(pois) {
+    //   let latSum = 0;
+    //   let lngSum = 0;
+    //   if (pois.length > 0) {
+    //     pois.forEach(poi => {
+    //       let {
+    //         lng,
+    //         lat
+    //       } = poi;
+    //       lngSum += lng;
+    //       latSum += lat;
+    //       this.markers.push([poi.lng, poi.lat]);
+    //     });
+    //     let center = {
+    //       lng: lngSum / pois.length,
+    //       lat: latSum / pois.length
+    //     };
+    //     this.mapCenter = [center.lng, center.lat];
+    //   }
+    // }
   },
   components: {
     Scroll
@@ -118,10 +162,6 @@ export default {
   watch: {
     searchData(newData) {
       this.searchData = newData
-    },
-    address(newData) {
-      this.address = newData
-      console.log(`ddddd ${this.address}`);
     }
   }
 }

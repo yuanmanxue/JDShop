@@ -2,7 +2,7 @@
 @Author: yuanmanxue
 @Date:   2017-11-03 02:47:08
 @Last modified by:   yuanmanxue
-@Last modified time: 2018-01-04 10:41:20
+@Last modified time: 2018-01-22 01:22:21
 -->
 
 <template>
@@ -72,17 +72,19 @@ export default {
     ...mapGetters([
       'shop',
       'shopList',
-      'currentShopList'
+      'currentShopList',
+      'address'
     ])
   },
   methods: {
     // 获取商铺详情信息
-    _getShopDetail(storeId, promotLable, catId, page) {
-      getShopDetail(storeId, promotLable, catId, page).then((res) => {
+    _getShopDetail(storeId, promotLable, catId, page, address) {
+      getShopDetail(storeId, promotLable, catId, page, address).then((res) => {
         if (res.code === ERR_OK) {
           let food = []
           this.shopLists = res.result.searchResultVOList
           this.totalCount = res.result.count
+          console.log(this.data);
           if (!this.tagTitle) {
             this.tagTitle = this.data[0].childCategoryList[0].title
           }
@@ -144,10 +146,9 @@ export default {
         this.promotLabel = this.data[this.iNum].childCategoryList[0].promotLabel
         this.tagTitle = this.data[this.iNum].childCategoryList[0].title
       }
-      console.log(this.catId)
       let flag = this.judgeToLoad()
       if (!flag) {
-        this._getShopDetail(this.shop.params.storeId, this.promotLabel, this.catId, this.page)
+        this._getShopDetail(this.shop.params.storeId, this.promotLabel, this.catId, this.page, this.address)
       }
       this.$refs.shopList.scrollToTop()
     },
@@ -159,7 +160,7 @@ export default {
       this.tagTitle = this.data[this.iNum].childCategoryList[this.jNum].title
       let flag = this.judgeToLoad()
       if (!flag) {
-        this._getShopDetail(this.shop.params.storeId, this.promotLabel, this.catId, this.page)
+        this._getShopDetail(this.shop.params.storeId, this.promotLabel, this.catId, this.page, this.address)
       }
       console.log(this.catId)
       this.$refs.shopList.scrollToTop()
@@ -176,7 +177,7 @@ export default {
     getMoreData() {
       if (this.getMoreFlag) {
         this.page += 1
-        this._getShopDetail(this.shop.params.storeId, this.promotLabel, this.catId, this.page)
+        this._getShopDetail(this.shop.params.storeId, this.promotLabel, this.catId, this.page, this.address)
       }
     },
     // 在vuex里面通过对shopList里面的数据遍历判断是否存在 promotLabel&&catId 相同字段的数据，存在返回true，不存在返回false
@@ -218,7 +219,7 @@ export default {
         this.promotLabel = this.data[this.iNum].childCategoryList[this.jNum].promotLabel
         this.tagTitle = this.data[this.iNum].childCategoryList[this.jNum].title
       }
-      this._getShopDetail(this.shop.params.storeId, this.promotLabel, this.catId)
+      this._getShopDetail(this.shop.params.storeId, this.promotLabel, this.catId, this.page, this.address)
     },
     getMoreFlag() {
       this.getMoreData()

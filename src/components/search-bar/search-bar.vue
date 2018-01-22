@@ -2,7 +2,7 @@
 @Author: yuanmanxue
 @Date:   2017-10-23 05:11:41
 @Last modified by:   yuanmanxue
-@Last modified time: 2018-01-18 04:06:55
+@Last modified time: 2018-01-22 09:48:36
 -->
 
 <template>
@@ -10,7 +10,7 @@
   <div class="search-bar" ref="searchBar">
     <div class="position" ref="position" @click="goToMap">
       <i class="iconfont">&#xe613;</i>
-      <span>学府一号学府一号学府一号学府一号</span>
+      <span>{{address.name}}</span>
       <i class="iconfont">&#xe501;</i>
     </div>
     <!-- 搜索框 -->
@@ -53,6 +53,12 @@ export default {
     rankType: {
       type: Number,
       defalut: 0
+    },
+    address: {
+      type: Object,
+      default() {
+        return {}
+      }
     }
   },
   created() {},

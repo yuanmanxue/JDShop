@@ -2,12 +2,13 @@
  * @Author: yuanmanxue
  * @Date:   2017-10-20 04:58:18
  * @Last modified by:   yuanmanxue
- * @Last modified time: 2018-01-18 01:59:47
+ * @Last modified time: 2018-01-22 03:16:41
  */
 
 import 'babel-polyfill'
 import Vue from 'vue'
 import App from './App'
+// import AMap from 'vue-amap'
 import AMap from 'vue-amap'
 import router from './router'
 import Vuelazyload from 'vue-lazyload'
@@ -17,15 +18,15 @@ import 'common/stylus/index.styl'
 import 'common/stylus/iconfont.css'
 import 'lib-flexible/flexible'
 import store from './store'
-import Element  from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
+// import Element  from 'element-ui'
+// import 'element-ui/lib/theme-chalk/index.css'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 
 Vue.config.productionTip = false
 fastclick.attach(document.body)
 Vue.use(VueResource)
 Vue.use(AMap)
-Vue.use(Element, { size: 'small' })
+// Vue.use(Element, { size: 'small' })
 // Vue.prototype.$ELEMENT = { size: 'small' }
 // Vue.use(Element)
 // Vue.use(Select)

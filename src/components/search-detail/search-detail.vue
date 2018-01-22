@@ -2,7 +2,7 @@
 @Author: yuanmanxue
 @Date:   2017-11-30 03:37:15
 @Last modified by:   yuanmanxue
-@Last modified time: 2018-01-18 02:27:49
+@Last modified time: 2018-01-22 11:08:03
 -->
 
 <template>
@@ -22,6 +22,7 @@
 <script type="text/ecmascript-6">
 import SearchBox from 'base/search-box/search-box'
 import {getHotTag, getHotTagShopList} from 'api/search.js'
+import {mapGetters} from 'vuex'
 import {ERR_OK} from 'api/config.js'
 export default {
   data() {
@@ -30,22 +31,27 @@ export default {
     }
   },
   created() {
-    this._getHotTag()
-    this._getHotTagShopList()
+    this._getHotTag(this.address)
+    this._getHotTagShopList(this.address)
+  },
+  computed:{
+    ...mapGetters([
+      'address'
+    ])
   },
   methods: {
     goBack() {
       this.$router.go(-1)
     },
-    _getHotTag() {
-      getHotTag().then((res) => {
+    _getHotTag(address) {
+      getHotTag(address).then((res) => {
         if (res.code === ERR_OK) {
           this.hotWords = res.result.hotWordVOList
         }
       })
     },
-    _getHotTagShopList() {
-      getHotTagShopList().then((res) => {
+    _getHotTagShopList(address) {
+      getHotTagShopList(address).then((res) => {
         console.log(res)
       })
     }

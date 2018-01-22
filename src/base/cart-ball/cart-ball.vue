@@ -2,7 +2,7 @@
 @Author: yuanmanxue
 @Date:   2017-11-13 04:39:28
 @Last modified by:   yuanmanxue
-@Last modified time: 2018-01-19 04:35:53
+@Last modified time: 2018-01-22 04:39:38
 -->
 
 <template>
@@ -72,7 +72,6 @@ export default {
       'decrCountFn'
     ]),
     drop() {
-      console.log('sss')
       let inner = this.$refs.innerBall[0]
       let w = inner.clientWidth
       // console.log(inner)
@@ -80,7 +79,6 @@ export default {
     //   let ball = this.$refs.ball[0]
     //   console.log(ball)
       let rect = inner.getBoundingClientRect()
-      console.log(rect)
       this.balls[0].x = rect.left
       this.balls[0].y = -(window.innerHeight - rect.top - w / 2)
       // console.log(this.balls[0].x)

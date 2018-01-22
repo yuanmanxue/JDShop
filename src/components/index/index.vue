@@ -2,7 +2,7 @@
 @Author: yuanmanxue
 @Date:   2017-10-23 02:51:44
 @Last modified by:   yuanmanxue
-@Last modified time: 2018-01-18 04:00:31
+@Last modified time: 2018-01-22 01:45:01
 -->
 
 <template>
@@ -12,6 +12,7 @@
             :fold="bgWhite"
             :storeSortTexts="storeSortTexts"
             :rankType="rankType"
+            :address="address"
             @change-rank-type="changeRankType"
             @selectRankType="selectRankType">
   </SearchBar>
@@ -100,7 +101,7 @@ import Load from 'base/load/load'
 import {getSlider} from 'api/slider.js'
 import {getShop} from 'api/shop.js'
 import {ERR_OK} from 'api/config.js'
-import {mapMutations} from 'vuex'
+import {mapMutations, mapGetters} from 'vuex'
 import {createShop} from 'common/js/shop'
 
 const SCROLLTOP = -115
@@ -127,13 +128,19 @@ export default {
   created() {
     this.probeType = 3
     this.listenScroll = true
-    this._getSlider()
-    this._getShop(this.rankType)
+    this._getSlider(this.address)
+    this._getShop(this.rankType, this.page, this.address)
   },
+  computed:{
+    ...mapGetters([
+      'address'
+    ])
+  },
+  mounted(){},
   methods: {
     // 获取轮播数据
-    _getSlider() {
-      getSlider().then((res) => {
+    _getSlider(address) {
+      getSlider(address).then((res) => {
         if (res.code === ERR_OK) {
           this.storeSortTexts = res.result.config.storeSortTexts
           console.log(res.result);
@@ -152,8 +159,8 @@ export default {
       })
     },
     // 获取商铺信息数据
-    _getShop(rankType, page) {
-      getShop(rankType, page).then((res) => {
+    _getShop(rankType, page, address) {
+      getShop(rankType, page, address).then((res) => {
         if (res.code === ERR_OK) {
           let concatArr = res.result.data.data
           this.shopData = this.shopData.concat(concatArr)
@@ -214,14 +221,14 @@ export default {
       this.rankType = newData
       this.shopData = []
       this.page = 1
-      this._getShop(this.rankType, this.page)
+      this._getShop(this.rankType, this.page, this.address)
     },
     // 滚动加载
     getMoreData() {
       if (this.flag) {
         console.log(this.page)
         this.page += 1
-        this._getShop(this.rankType, this.page)
+        this._getShop(this.rankType, this.page, this.address)
       }
     },
     // 监听子组件点击事件

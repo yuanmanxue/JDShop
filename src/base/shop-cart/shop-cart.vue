@@ -2,7 +2,7 @@
 @Author: yuanmanxue
 @Date:   2017-11-14 03:35:49
 @Last modified by:   yuanmanxue
-@Last modified time: 2018-01-19 05:24:41
+@Last modified time: 2018-01-22 05:08:01
 -->
 
 <template>
@@ -80,7 +80,7 @@ export default {
       showList2:false,
       foo: false,
       checkModel: [],
-      checkAll: false
+      checkAll: true
     }
   },
   props: {
@@ -92,7 +92,6 @@ export default {
   created() {
     this.probeType = 3
     this.listenScroll = true
-    this.changeState()
   },
   mounted() {
   },
@@ -163,6 +162,12 @@ export default {
         this.checkModel = []
       }
     },
+    pushCheckModel() {
+      this.addCatList.forEach((item, index) => {
+        this.checkModel.push(item.skuId)
+      })
+      console.log(this.checkModel);
+    },
     ...mapActions([
       'addCountFn',
       'decrCountFn',
@@ -180,6 +185,7 @@ export default {
     addCatList() {
       this.$nextTick(() => {
         this.$refs.addCartListScroll.refresh()
+        this.pushCheckModel()
       })
     },
     checkModel() {
