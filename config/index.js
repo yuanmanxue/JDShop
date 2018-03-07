@@ -2,7 +2,7 @@
  * @Author: yuanmanxue
  * @Date:   2017-10-20 04:58:18
  * @Last modified by:   yuanmanxue
- * @Last modified time: 2018-03-07 04:19:00
+ * @Last modified time: 2018-03-07 04:25:01
  */
 
 'use strict'
@@ -14,7 +14,7 @@ const path = require('path')
 module.exports = {
   build: {
     env: require('./prod.env'),
-    port: 9005,
+    port: 3000,
     index: path.resolve(__dirname, '../dist/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
@@ -34,7 +34,7 @@ module.exports = {
   },
   dev: {
     env: require('./dev.env'),
-    port: process.env.PORT || 8080,
+    port: process.env.PORT || 3001,
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
