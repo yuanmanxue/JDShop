@@ -2,7 +2,7 @@
 @Author: yuanmanxue
 @Date:   2017-10-23 02:51:44
 @Last modified by:   yuanmanxue
-@Last modified time: 2018-01-22 01:45:01
+@Last modified time: 2018-02-01 10:30:41
 -->
 
 <template>
@@ -51,7 +51,7 @@
           </div>
         </div>
         <!-- footerBanner2 -->
-        <div class="footer-slider" v-if="footerSlider.length>0">
+        <!-- <div class="footer-slider" v-if="footerSlider.length>0">
           <div class="slider-wrapper">
             <Slider :autoPlay='false'>
               <div v-for="item in footerSlider[1]">
@@ -61,11 +61,11 @@
               </div>
             </Slider>
           </div>
-        </div>
+        </div> -->
         <!-- 秒杀区 -->
         <Seckill :data='seckill'></Seckill>
         <!-- footerBanner3 -->
-        <div class="footer-slider" v-if="footerSlider.length>0">
+        <!-- <div class="footer-slider" v-if="footerSlider.length>0">
           <div class="slider-wrapper">
             <Slider :autoPlay='false'>
               <div v-for="item in footerSlider[2]">
@@ -75,7 +75,7 @@
               </div>
             </Slider>
           </div>
-        </div>
+        </div> -->
         <!-- 商铺列表 -->
         <div ref="shopList">
           <!-- 正在加载 -->

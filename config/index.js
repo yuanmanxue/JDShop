@@ -1,3 +1,9 @@
+/**
+ * @Author: yuanmanxue
+ * @Date:   2017-10-20 04:58:18
+ * @Last modified by:   yuanmanxue
+ * @Last modified time: 2018-03-07 03:52:01
+ */
 
 'use strict'
 // Template version: 1.1.3
@@ -8,6 +14,7 @@ const path = require('path')
 module.exports = {
   build: {
     env: require('./prod.env'),
+    port: 9001,
     index: path.resolve(__dirname, '../dist/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
